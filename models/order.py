@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api
+from odoo.tools.float_utils import float_round
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
