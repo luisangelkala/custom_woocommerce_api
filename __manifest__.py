@@ -18,7 +18,8 @@
         'views/account_move_report_patch.xml',
         'views/financing_agency_form_patch.xml',
         'views/account_move_form_patch.xml',
-        'views/res_partner_views.xml'
+        'views/res_partner_views.xml',
+        'views/product_views.xml'
     ],
     'controllers': [
         'controllers/main.py',
