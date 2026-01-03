@@ -5,11 +5,9 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_tree_view"/>
         <field name="arch" type="xml">
-            
             <xpath expr="//field[@name='list_price']" position="after">
-                <field name="x_brand_discount" string="Desc. WP (%)" optional="show" widget="percentage"/>
+                <field name="x_brand_discount" string="Desc. WP (%)" optional="show"/>
             </xpath>
-
         </field>
     </record>
 
@@ -18,8 +16,8 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='list_price']" position="after">
-                <field name="x_brand_discount" string="Descuento Marca WP (%)"/>
+            <xpath expr="//label[@for='list_price']" position="before">
+                <field name="x_brand_discount" string="Descuento Marca WP (%)" style="font-weight: bold; color: #2a9d8f;"/>
             </xpath>
         </field>
     </record>
