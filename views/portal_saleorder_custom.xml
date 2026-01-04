@@ -20,12 +20,12 @@
         </th>
     </xpath>
     
-    <xpath expr="//span[@t-field='line.price_unit']" position="replace">
+    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_unit']" position="replace">
       <span t-field="line.effective_price_quote"
             t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
     </xpath>
 
-    <xpath expr="//span[@t-field='line.price_subtotal']" position="replace">
+    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_subtotal']" position="replace">
        <span t-esc="line.effective_price_quote * line.product_uom_qty" 
              t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
     </xpath>
