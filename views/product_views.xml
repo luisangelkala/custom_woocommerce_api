@@ -17,7 +17,7 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//label[@for='list_price']" position="before">
-                <field name="x_brand_discount" string="Descuento Marca WP (%)" style="font-weight: bold; color: #2a9d8f;"/>
+                <field name="x_brand_discount" string="Descuento (%)" style="font-weight: bold; color: #2a9d8f;"/>
             </xpath>
         </field>
     </record>
