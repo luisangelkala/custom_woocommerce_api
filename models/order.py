@@ -136,26 +136,29 @@ class SaleOrderLine(models.Model):
     @api.depends('effective_price_quote', 'product_uom_qty', 'tax_id', 'price_unit', 'discount_price')
     def _compute_tax_id(self):
         for line in self:
-            # Misma lógica híbrida para impuestos
+            # 1. Lógica Híbrida: Elegir precio base (Cuota o Precio Lista)
             if line.effective_price_quote and line.effective_price_quote > 0.0:
                 unit_price_to_use = line.effective_price_quote
             else:
                 unit_price_to_use = line.price_unit
 
-            # Odoo compute_all ya sabe manejar descuentos si se los pasamos,
-            # pero como calculamos manual, pasamos el precio con descuento ya aplicado
-            # o dejamos que Odoo maneje el descuento (preferible pasar precio base y descuento).
-            
-            # Opción robusta: Pasamos el precio base y le decimos a Odoo el % de descuento
+            # 2. CORRECCIÓN: Aplicar el descuento manualmente AQUÍ
+            # Odoo compute_all no acepta 'discount' como parámetro.
+            # Debemos pasarle el precio NETO (ya rebajado).
+            discount_factor = 1.0 - ((line.discount_price or 0.0) / 100.0)
+            price_reduced = (unit_price_to_use or 0.0) * discount_factor
+
+            # 3. Calcular impuestos sobre el precio reducido
             taxes = line.tax_id.compute_all(
-                unit_price_to_use or 0.0,
+                price_reduced,
                 currency=line.order_id.currency_id,
                 quantity=line.product_uom_qty or 0.0,
                 product=line.product_id,
                 partner=line.order_id.partner_shipping_id,
-                handle_price_include=False,
-                discount=line.discount_price # <--- Pasamos el descuento al motor de impuestos
+                handle_price_include=False
+                # Ya no pasamos 'discount' aquí, porque ya lo aplicamos arriba
             )
+            
             line.price_tax = float_round(
                 taxes['total_included'] - taxes['total_excluded'],
                 precision_rounding=line.currency_id.rounding
