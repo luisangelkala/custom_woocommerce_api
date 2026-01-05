@@ -5,92 +5,84 @@
           name="Quotation/Order Document - Replace Unit Price with Monthly Quote">
 
     <xpath expr="//th[@name='th_priceunit']" position="replace">
-      <th name="th_priceunit" class="text-end">
-          <span t-translate="on">Devis mensuel</span>
-      </th>
+        <th name="th_priceunit" class="text-end">
+            <span t-translate="on">Devis mensuel</span>
+        </th>
     </xpath>
 
     <xpath expr="//th[@name='th_description']" position="replace">
-       <th name="th_description" style="text-align: left">Description</th>
+        <th name="th_description" style="text-align: left">Description</th>
     </xpath>
-
     <xpath expr="//th[@name='th_quantity']" position="replace">
-       <th name="th_quantity" style="text-align: right">Quantité</th>
+        <th name="th_quantity" style="text-align: right">Quantité</th>
     </xpath>
-
     <xpath expr="//th[@name='th_subtotal']" position="replace">
         <th name="th_subtotal" style="text-align: right">Montant</th>
     </xpath>
 
     <xpath expr="//h2" position="replace">
-      <h2>
-        <span>Devis</span>
-        <span t-out="doc.name"/>
-      </h2>
+        <h2>
+            <span>Devis</span>
+            <span t-out="doc.name"/>
+        </h2>
     </xpath>
 
     <xpath expr="//div[@id='informations']" position="replace">
-      <div id="informations" class="row mt-4 mb-2">
-        <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
-          <strong>Date:</strong><br/>
-          <span class="m-0" t-field="doc.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+        <div id="informations" class="row mt-4 mb-2">
+            <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
+                <strong>Date:</strong><br/>
+                <span class="m-0" t-field="doc.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+            </div>
         </div>
-      </div>
     </xpath>
 
     <xpath expr="//td[@name='td_priceunit']" position="replace">
-        <td name="td_priceunit" class="text-end">
-            <span t-field="line.effective_price_quote" t-options='{"widget": "monetary", "display_currency": line.order_id.currency_id}'/>
-        </td>
-    </xpath>
-
-    <xpath expr="//td[@name='td_subtotal']" position="replace">
-        <td name="td_subtotal" class="text-end o_price_total">
-            <span t-esc="line.effective_price_quote * line.product_uom_qty" 
+         <td name="td_priceunit" class="text-end">
+            <span t-field="line.effective_price_quote"
                   t-options='{"widget": "monetary", "display_currency": line.order_id.currency_id}'/>
-        </td>
+         </td>
     </xpath>
 
     <xpath expr="//td[@name='td_quantity']/span[@t-field='line.product_uom_qty']" position="replace">
-      <span t-esc="line.product_uom_qty"/>
+        <span t-esc="line.product_uom_qty"/>
     </xpath>
-
     <xpath expr="//td[@name='td_quantity']/span[@t-field='line.product_uom']" position="replace">
-       </xpath>
+        </xpath>
 
     <xpath expr="//td[@name='td_subtotal']" position="after">
-      <tr>
-        <td t-if="line.include_full_service_warranty" class="text-start small" style="border-top: none; padding-top: 0;">
-            <i class="fa fa-check text-success"/> <span t-translate="on">Inclut la garantie complète</span>
-        </td>
-        <td t-else="line.include_full_service_warranty" class="text-start small" style="border-top: none; padding-top: 0;">
-            <span t-translate="on">Inclut la garantie standard</span>
-        </td>
-        <td class="text-end" style="border-top: none;"></td>
-        <td class="text-end" style="border-top: none;"></td>
-        <td class="text-end" style="border-top: none;"></td>
-      </tr>
+        <tr>
+            <td t-if="line.include_full_service_warranty" class="text-start small">
+                <span t-translate="on">Inclut la garantie complète</span>
+            </td>
+            <td t-else="line.include_full_service_warranty" class="text-start small">
+                <span t-translate="on">Inclut la garantie standard</span>
+            </td>
+            <td class="text-end"/>
+            <td class="text-end"/>
+            <td class="text-end"/>
+        </tr>
     </xpath>
 
     <xpath expr="//th[@name='th_taxes']" position="replace">
-       <th t-if="False"/>
+        <th t-if="False"/>
     </xpath>
     <xpath expr="//td[@name='td_taxes']" position="replace">
-       <td t-if="False"/>
+        <td t-if="False"/>
     </xpath>
 
     <xpath expr="//div[@id='total']/div/table" position="inside">
-      <tr>
-        <td>TVA (20%):</td>
-        <td class="text-end">
-          <span t-field="doc.amount_vat_20"/>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Total TTC:</strong></td>
-        <td class="text-end">
-          <strong t-field="doc.amount_total_incl_vat_20"/></td>
-      </tr>
+        <tr>
+            <td><span t-translate="on">TVA (20%):</span></td>
+            <td class="text-end">
+                <span t-field="doc.amount_vat_20"/>
+            </td>
+        </tr>
+        <tr>
+            <td><strong t-translate="on">Total TTC:</strong></td>
+            <td class="text-end">
+                <strong t-field="doc.amount_total_incl_vat_20"/>
+            </td>
+        </tr>
     </xpath>
 
   </template>
