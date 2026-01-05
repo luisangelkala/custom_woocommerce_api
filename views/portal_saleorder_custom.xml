@@ -4,14 +4,10 @@
 
     <xpath expr="//section[@id='details']" position="before">
       <style>
-        /* Ocultamos por defecto cualquier TH o TD que sea numérico (text-end) */
-        /* Esto elimina las columnas originales de Precio, Descuento y Subtotal para evitar duplicados */
         #sales_order_table th.text-end,
         #sales_order_table td.text-end {
           display: none !important;
         }
-
-        /* PERO, forzamos a mostrar las columnas que tengan nuestra clase personalizada */
         #sales_order_table th.my-custom-col,
         #sales_order_table td.my-custom-col {
           display: table-cell !important;
@@ -21,14 +17,10 @@
 
     <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][1]" position="replace">
         <th class="text-end my-custom-col">Quantity</th>
-        
         <th class="text-end my-custom-col">Monthly Quote</th>
-        
         <th class="text-end my-custom-col">Disc. (%)</th>
-        
         <th class="text-end my-custom-col">Unit Price</th>
     </xpath>
-
 
     <xpath expr="//table[@id='sales_order_table']//tbody//td[contains(@class, 'text-end')][1]" position="replace">
         
@@ -46,18 +38,11 @@
         </td>
 
         <td class="text-end my-custom-col">
-             <t t-if="line.effective_price_quote > 0">
-                <span t-field="line.effective_price_quote"
-                      t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
-             </t>
-             <t t-else="">
-                 <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
-                       t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
-             </t>
+             <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
+                   t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
         </td>
 
     </xpath>
-
 
     <xpath expr="//div[@id='total']//div[contains(@class,'ms-auto')]" position="inside">
       <hr/>
