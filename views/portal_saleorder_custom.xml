@@ -4,77 +4,58 @@
 
     <xpath expr="//section[@id='details']" position="before">
       <style>
-        /* Ocultar columna de impuestos */
-        #sales_order_table th#taxes_header,
-        #sales_order_table td#taxes,
-        #sales_order_table th.text-end[name='th_taxes'],
-        #sales_order_table td.text-end[name='td_taxes'] {
+        /* Ocultamos por defecto cualquier TH o TD que sea numérico (text-end) */
+        /* Esto elimina las columnas originales de Precio, Descuento y Subtotal para evitar duplicados */
+        #sales_order_table th.text-end,
+        #sales_order_table td.text-end {
           display: none !important;
+        }
+
+        /* PERO, forzamos a mostrar las columnas que tengan nuestra clase personalizada */
+        #sales_order_table th.my-custom-col,
+        #sales_order_table td.my-custom-col {
+          display: table-cell !important;
         }
       </style>
     </xpath>
 
-    <xpath expr="//table[@id='sales_order_table']" position="after">
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function () {
-                var table = document.getElementById('sales_order_table');
-                if (!table) return;
-
-                // 1. Renombrar columna de Precio Unitario -> "Monthly Quote"
-                // Buscamos el segundo TH numérico (el 1ro es Qty)
-                var thPrice = table.querySelectorAll('thead th.text-end')[1]; 
-                if (thPrice) thPrice.textContent = 'Monthly Quote';
-
-                // 2. Renombrar columna de Descuento -> "Disc. (%)"
-                // Buscamos por texto o posición (usualmente está después del precio)
-                // Odoo a veces pone la clase d-none d-md-table-cell, la forzamos a mostrarse
-                var thDisc = table.querySelector('thead th[title="Discount"]');
-                if (!thDisc) {
-                     // Si no lo encuentra por title, busca el 3er numérico
-                     thDisc = table.querySelectorAll('thead th.text-end')[2]; 
-                }
-                if (thDisc) {
-                    thDisc.textContent = 'Disc. (%)';
-                    thDisc.style.display = 'table-cell'; // Forzar visibilidad
-                }
-
-                // 3. Renombrar columna de Subtotal -> "Unit Price"
-                // Buscamos el último TH numérico
-                var thAmount = table.querySelector('thead th.text-end:last-child');
-                if (!thAmount) {
-                     var allTh = table.querySelectorAll('thead th.text-end');
-                     thAmount = allTh[allTh.length - 1];
-                }
-                if (thAmount) thAmount.textContent = 'Unit Price';
-            });
-        </script>
+    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][1]" position="replace">
+        <th class="text-end my-custom-col">Quantity</th>
+        
+        <th class="text-end my-custom-col">Monthly Quote</th>
+        
+        <th class="text-end my-custom-col">Disc. (%)</th>
+        
+        <th class="text-end my-custom-col">Unit Price</th>
     </xpath>
 
 
-    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_unit']" position="replace">
-         <span t-field="line.price_quote"
-               t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
-    </xpath>
-
-    <xpath expr="//table[@id='sales_order_table']//tbody//td[contains(@class, 'text-end')][contains(., '%') or @groups]" position="replace">
-        <td class="text-end">
-            <span t-field="line.discount_price"/>
+    <xpath expr="//table[@id='sales_order_table']//tbody//td[contains(@class, 'text-end')][1]" position="replace">
+        
+        <td class="text-end my-custom-col">
+            <span t-field="line.product_uom_qty"/>
         </td>
-    </xpath>
-    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(., 'Disc')]" position="replace">
-         <th class="text-end">Disc. (%)</th>
-    </xpath>
 
+        <td class="text-end my-custom-col">
+            <span t-field="line.price_quote"
+                  t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
+        </td>
 
-    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_subtotal']" position="replace">
-         <t t-if="line.effective_price_quote > 0">
-            <span t-field="line.effective_price_quote"
-                  t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
-         </t>
-         <t t-else="">
-            <span t-field="line.price_subtotal"
-                  t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
-         </t>
+        <td class="text-end my-custom-col">
+            <span t-field="line.discount_price"/> %
+        </td>
+
+        <td class="text-end my-custom-col">
+             <t t-if="line.effective_price_quote > 0">
+                <span t-field="line.effective_price_quote"
+                      t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
+             </t>
+             <t t-else="">
+                 <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
+                       t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
+             </t>
+        </td>
+
     </xpath>
 
 
