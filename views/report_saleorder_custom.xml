@@ -6,7 +6,7 @@
 
     <xpath expr="//th[@name='th_priceunit']" position="replace">
         <th name="th_priceunit" class="text-end">
-            <span t-translate="on">Devis mensuel</span>
+            <span t-translate="on">Monthly Quote</span>
         </th>
     </xpath>
 

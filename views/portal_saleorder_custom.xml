@@ -4,33 +4,35 @@
 
     <xpath expr="//section[@id='details']" position="before">
       <style>
-        table#sales_order_table td.text-end span:nth-of-type(2) { display: none !important; }
         #sales_order_table th#taxes_header,
-        #sales_order_table td#taxes {
+        #sales_order_table td#taxes,
+        #sales_order_table th.text-end[name='th_taxes'],
+        #sales_order_table td.text-end[name='td_taxes'] {
           display: none !important;
         }
       </style>
     </xpath>
 
-    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][1]" position="replace">
+    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][2]" position="replace">
         <th class="text-end">
-            <span t-translate="on">Devis mensuel</span>
+            <span>Monthly Quote</span>
         </th>
     </xpath>
 
     <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_unit']" position="replace">
-      <span t-field="line.effective_price_quote"
-            t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
+       <span t-field="line.effective_price_quote" 
+             t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
     </xpath>
 
     <xpath expr="//div[@id='total']//div[contains(@class,'ms-auto')]" position="inside">
+      <hr/>
       <div class="d-flex justify-content-between mb-1">
-        <span t-translate="on">IVA (20%):</span>
-        <span t-field="sale_order.amount_vat_20"/>
+        <span>TVA (20%):</span>
+        <span t-field="sale_order.amount_vat_20" t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
       </div>
-      <div class="d-flex justify-content-between">
-        <strong t-translate="on">Total Incl. IVA:</strong>
-        <strong t-field="sale_order.amount_total_incl_vat_20"/>
+      <div class="d-flex justify-content-between font-weight-bold">
+        <span>Total TTC:</span>
+        <strong t-field="sale_order.amount_total_incl_vat_20" t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
       </div>
     </xpath>
 
