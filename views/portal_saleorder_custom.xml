@@ -13,14 +13,37 @@
       </style>
     </xpath>
 
-    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][2]" position="replace">
+    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(text(), 'Unit Price') or contains(text(), 'Prix unitaire')]" position="replace">
+        <th class="text-end">
+            <span>Unit Price</span>
+        </th>
+    </xpath>
+
+    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(text(), 'Unit Price') or contains(text(), 'Prix unitaire')]" position="after">
+        <th class="text-end">
+            <span>Disc. (%)</span>
+        </th>
+    </xpath>
+
+    <xpath expr="//table[@id='sales_order_table']//thead//th[contains(text(), 'Amount') or contains(text(), 'Montant')]" position="replace">
         <th class="text-end">
             <span>Monthly Quote</span>
         </th>
     </xpath>
 
     <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_unit']" position="replace">
-       <span t-field="line.effective_price_quote" 
+         <span t-field="line.price_quote"
+               t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
+    </xpath>
+
+    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_unit']" position="after">
+        <td class="text-end">
+            <span t-field="line.discount_price"/> %
+        </td>
+    </xpath>
+
+    <xpath expr="//table[@id='sales_order_table']//*[@t-field='line.price_subtotal']" position="replace">
+       <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
              t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
     </xpath>
 

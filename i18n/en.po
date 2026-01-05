@@ -257,3 +257,9 @@ msgstr "Description"
 #: model:ir.model.fields,field_description:custom_woocommerce_api.field_sale_order_line__discount_price
 msgid "Discount"
 msgstr "Discount (%)"
+
+#. module: custom_woocommerce_api
+#: model:ir.ui.view,arch_db:custom_woocommerce_api.sale_order_portal_content_inherit_custom
+#: model:ir.ui.view,arch_db:custom_woocommerce_api.report_saleorder_document_inherit_custom
+msgid "Disc. (%)"
+msgstr "Remise (%)"
