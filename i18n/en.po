@@ -255,7 +255,7 @@ msgstr "Description"
 
 #. module: custom_woocommerce_api
 #: model:ir.model.fields,field_description:custom_woocommerce_api.field_sale_order_line__discount_price
-msgid "Discount"
+msgid "Discount (%)"
 msgstr "Discount (%)"
 
 #. module: custom_woocommerce_api
