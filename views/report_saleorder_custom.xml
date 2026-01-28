@@ -3,6 +3,21 @@
   <template id="report_saleorder_document_inherit_custom"
           inherit_id="sale.report_saleorder_document">
 
+    <xpath expr="//div[@id='informations']" position="replace">
+        <div id="informations" class="row mt-4 mb-2">
+            <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
+                <strong>Date:</strong><br/>
+                <span class="m-0" t-field="doc.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+            </div>
+            
+            <div t-if="doc.installments" class="col-auto col-3 mw-100 mb-2">
+                <strong>Durée (mois):</strong><br/>
+                <span class="m-0" t-field="doc.installments"/>
+            </div>
+        </div>
+    </xpath>
+
+
     <xpath expr="//th[@name='th_quantity']" position="replace">
         <th name="th_quantity" class="text-end">Quantité</th>
         <th name="th_loyer_unit" class="text-end">Loyer Unitaire</th>
@@ -18,15 +33,12 @@
         <td name="td_quantity" class="text-end">
             <span t-field="line.product_uom_qty"/>
         </td>
-        
         <td class="text-end">
             <span t-field="line.price_quote" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
         </td>
-
         <td class="text-end">
             <span t-field="line.discount_price"/> %
         </td>
-
         <td class="text-end o_price_total">
              <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
         </td>

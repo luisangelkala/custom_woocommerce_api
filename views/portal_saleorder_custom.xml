@@ -4,7 +4,6 @@
 
     <xpath expr="//section[@id='details']" position="before">
       <style>
-        /* Ocultar columnas originales de Odoo */
         #sales_order_table th.text-end:not(.my-custom-col),
         #sales_order_table td.text-end:not(.my-custom-col),
         #sales_order_table th[id*="amount"]:not(.my-custom-col),
@@ -12,7 +11,6 @@
         #sales_order_table td[id*="subtotal"]:not(.my-custom-col) {
           display: none !important;
         }
-        /* Mostrar nuestras columnas personalizadas */
         #sales_order_table th.my-custom-col,
         #sales_order_table td.my-custom-col {
           display: table-cell !important;
@@ -20,36 +18,42 @@
       </style>
     </xpath>
 
+    <xpath expr="//div[@id='sale_info']//tr[.//span[@t-field='sale_order.user_id']]" position="replace"/>
+    <xpath expr="//div[@id='sale_info']//tr[th[contains(., 'Salesperson')]]" position="replace"/>
+
+
+    <xpath expr="//div[@id='sale_info']//tbody" position="inside">
+        <tr t-if="sale_order.installments">
+            <th class="ps-0 pb-0">Durée (mois):</th>
+            <td class="w-100 pb-0 text-wrap">
+                <span t-field="sale_order.installments"/>
+            </td>
+        </tr>
+    </xpath>
+
+
     <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][1]" position="replace">
         <th class="text-end my-custom-col">Quantité</th>
-        
         <th class="text-end my-custom-col">Loyer Unitaire</th>
-        
         <th class="text-end my-custom-col">Ristourne en %</th>
-        
         <th class="text-end my-custom-col">Loyer Mensuel</th>
     </xpath>
 
     <xpath expr="//table[@id='sales_order_table']//tbody//td[contains(@class, 'text-end')][1]" position="replace">
-        
         <td class="text-end my-custom-col">
             <span t-field="line.product_uom_qty"/>
         </td>
-
         <td class="text-end my-custom-col">
             <span t-field="line.price_quote"
                   t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
         </td>
-
         <td class="text-end my-custom-col">
             <span t-field="line.discount_price"/> %
         </td>
-
         <td class="text-end my-custom-col">
              <span t-field="line.price_subtotal"
                    t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
         </td>
-
     </xpath>
 
     <xpath expr="//div[@id='total']//div[contains(@class,'ms-auto')]" position="inside">
