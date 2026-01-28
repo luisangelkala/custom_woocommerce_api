@@ -4,10 +4,15 @@
 
     <xpath expr="//section[@id='details']" position="before">
       <style>
-        #sales_order_table th.text-end,
-        #sales_order_table td.text-end {
+        /* Ocultar columnas originales de Odoo */
+        #sales_order_table th.text-end:not(.my-custom-col),
+        #sales_order_table td.text-end:not(.my-custom-col),
+        #sales_order_table th[id*="amount"]:not(.my-custom-col),
+        #sales_order_table th[id*="subtotal"]:not(.my-custom-col),
+        #sales_order_table td[id*="subtotal"]:not(.my-custom-col) {
           display: none !important;
         }
+        /* Mostrar nuestras columnas personalizadas */
         #sales_order_table th.my-custom-col,
         #sales_order_table td.my-custom-col {
           display: table-cell !important;
@@ -16,10 +21,13 @@
     </xpath>
 
     <xpath expr="//table[@id='sales_order_table']//thead//th[contains(@class, 'text-end')][1]" position="replace">
-        <th class="text-end my-custom-col">Quantity</th>
-        <th class="text-end my-custom-col">Monthly Quote</th>
-        <th class="text-end my-custom-col">Disc. (%)</th>
-        <th class="text-end my-custom-col">Unit Price</th>
+        <th class="text-end my-custom-col">Quantité</th>
+        
+        <th class="text-end my-custom-col">Loyer Unitaire</th>
+        
+        <th class="text-end my-custom-col">Ristourne en %</th>
+        
+        <th class="text-end my-custom-col">Loyer Mensuel</th>
     </xpath>
 
     <xpath expr="//table[@id='sales_order_table']//tbody//td[contains(@class, 'text-end')][1]" position="replace">
@@ -38,7 +46,7 @@
         </td>
 
         <td class="text-end my-custom-col">
-             <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
+             <span t-field="line.price_subtotal"
                    t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/>
         </td>
 

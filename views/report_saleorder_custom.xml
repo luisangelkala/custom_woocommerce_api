@@ -4,10 +4,10 @@
           inherit_id="sale.report_saleorder_document">
 
     <xpath expr="//th[@name='th_quantity']" position="replace">
-        <th name="th_quantity" class="text-end">Quantity</th>
-        <th name="th_monthly_quote" class="text-end">Monthly Quote</th>
-        <th name="th_discount" class="text-end">Disc. (%)</th>
-        <th name="th_unit_price" class="text-end">Unit Price</th>
+        <th name="th_quantity" class="text-end">Quantité</th>
+        <th name="th_loyer_unit" class="text-end">Loyer Unitaire</th>
+        <th name="th_ristourne" class="text-end">Ristourne en %</th>
+        <th name="th_loyer_mensuel" class="text-end">Loyer Mensuel</th>
     </xpath>
 
     <xpath expr="//th[@name='th_priceunit']" position="replace"/>
@@ -28,8 +28,7 @@
         </td>
 
         <td class="text-end o_price_total">
-             <span t-esc="(line.price_subtotal / line.product_uom_qty) if line.product_uom_qty else 0.0" 
-                   t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+             <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
         </td>
     </xpath>
 
