@@ -5,16 +5,28 @@
 
     <xpath expr="//div[@id='informations']" position="replace">
         <div id="informations" class="row mt-4 mb-2">
+            
             <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
-                <strong>Date:</strong><br/>
-                <span class="m-0" t-field="doc.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                <strong>Date:</strong>
+                <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
+            </div>
+
+            <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2">
+                <strong>Expiration:</strong>
+                <p class="m-0" t-field="doc.validity_date" t-options='{"widget": "date"}'/>
+            </div>
+
+            <div t-if="doc.installments" class="col-auto col-3 mw-100 mb-2">
+                <strong>Durée (mois):</strong>
+                <p class="m-0" t-field="doc.installments"/>
             </div>
             
-            <div t-if="doc.installments" class="col-auto col-3 mw-100 mb-2">
-                <strong>Durée (mois):</strong><br/>
-                <span class="m-0" t-field="doc.installments"/>
+            <div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+                <strong>Référence client:</strong>
+                <p class="m-0" t-field="doc.client_order_ref"/>
             </div>
-        </div>
+
+            </div>
     </xpath>
 
 
@@ -29,16 +41,20 @@
     <xpath expr="//th[@name='th_subtotal']" position="replace"/>
     <xpath expr="//th[@name='th_taxes']" position="replace"/>
 
+
     <xpath expr="//td[@name='td_quantity']" position="replace">
         <td name="td_quantity" class="text-end">
             <span t-field="line.product_uom_qty"/>
         </td>
+        
         <td class="text-end">
             <span t-field="line.price_quote" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
         </td>
+
         <td class="text-end">
             <span t-field="line.discount_price"/> %
         </td>
+
         <td class="text-end o_price_total">
              <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
         </td>
@@ -47,6 +63,7 @@
     <xpath expr="//td[@name='td_priceunit']" position="replace"/>
     <xpath expr="//td[@name='td_subtotal']" position="replace"/>
     <xpath expr="//td[@name='td_taxes']" position="replace"/>
+
 
     <xpath expr="//div[@id='total']//table" position="inside">
       <tr class="border-black o_subtotal">
