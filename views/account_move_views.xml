@@ -6,24 +6,37 @@
     <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
 
-      <!-- ✅ Add Include Warranty column to invoice lines tree view -->
-      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="after">
-        <field name="include_full_service_warranty" string="Include Warranty" readonly="1"/>
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="attributes">
+         <attribute name="column_invisible">1</attribute>
       </xpath>
-
-      <!-- ✅ Add IVA and Total Incl. IVA after Tax Totals in footer -->
-      <xpath expr="//field[@name='amount_residual']" position="before">
-        <field name="amount_vat_20" string="IVA (20%)"/>
-        <field name="amount_total_incl_vat_20" string="Total Incl. IVA"/>
-      </xpath>
-
-      <!-- ✅ Hide the Taxes column in the invoice lines tree view -->
       <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='tax_ids']" position="attributes">
-        <attribute name="invisible">1</attribute>
-        <attribute name="column_invisible">1</attribute>
+         <attribute name="column_invisible">1</attribute>
       </xpath>
 
-      <!-- ✅ Add Custom Info Page in the notebook -->
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+         <field name="x_description" string="Description" optional="show"/>
+      </xpath>
+
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="attributes">
+         <attribute name="string">Prix</attribute>
+      </xpath>
+
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="after">
+         <field name="discount" string="Disc.%" optional="show" width="80px"/>
+         <field name="include_full_service_warranty" string="Garantie?" widget="boolean_toggle" width="90px"/>
+      </xpath>
+
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="attributes">
+         <attribute name="string">Montant</attribute>
+      </xpath>
+
+
+      <xpath expr="//field[@name='amount_residual']" position="before">
+        <field name="amount_vat_20" string="TVA (20%)"/>
+        <field name="amount_total_incl_vat_20" string="Total TTC" decoration-bf="1"/>
+      </xpath>
+
+
       <xpath expr="//sheet/notebook" position="inside">
         <page string="Custom Info">
           <group>
