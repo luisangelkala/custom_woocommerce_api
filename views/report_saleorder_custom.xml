@@ -1,127 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <template id="report_saleorder_document_inherit_custom"
-          inherit_id="sale.report_saleorder_document">
+  <data>
+    <record id="report_saleorder_document_inherit_custom_v2" model="ir.ui.view">
+      <field name="name">report.saleorder.document.inherit.custom.v2</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.report_saleorder_document"/>
+      <field name="priority">999</field> <field name="arch" type="xml">
 
-    <xpath expr="//t[@t-set='address']" position="replace">
-        <t t-set="address">
-            <div style="font-size: 14px;">
-                
-                <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">
-                    <span t-field="doc.partner_id.name"/>
-                </div>
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address">
+                <div style="font-size: 14px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">
+                        <span t-field="doc.partner_id.name"/>
+                    </div>
 
-                <div style="margin-bottom: 10px;">
-                    <div t-if="doc.partner_id.street">
-                        <span t-field="doc.partner_id.street"/>
-                    </div>
-                    <div t-if="doc.partner_id.street2">
-                        <span t-field="doc.partner_id.street2"/>
-                    </div>
                     <div>
-                        <span t-if="doc.partner_id.zip" t-field="doc.partner_id.zip"/>
-                        <span t-if="doc.partner_id.city" t-field="doc.partner_id.city"/>
+                        <span t-if="doc.partner_id.street" t-field="doc.partner_id.street"/><br t-if="doc.partner_id.street"/>
+                        <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2"/><br t-if="doc.partner_id.street2"/>
+                        <span t-if="doc.partner_id.zip" t-field="doc.partner_id.zip"/> 
+                        <span t-if="doc.partner_id.city" t-field="doc.partner_id.city"/><br/>
+                        <span t-if="doc.partner_id.country_id" t-field="doc.partner_id.country_id.name"/>
                     </div>
-                    <div t-if="doc.partner_id.country_id">
-                        <span t-field="doc.partner_id.country_id.name"/>
-                    </div>
-                </div>
 
-                <div>
-                    <div t-if="doc.partner_id.phone">
-                        <strong>Téléphone : </strong> <span t-field="doc.partner_id.phone"/>
-                    </div>
-                    <div t-if="not doc.partner_id.phone and doc.partner_id.mobile">
-                        <strong>Mobile : </strong> <span t-field="doc.partner_id.mobile"/>
-                    </div>
-                    
-                    <div t-if="doc.partner_id.email">
-                        <strong>Email : </strong> <span t-field="doc.partner_id.email"/>
-                    </div>
-                    
-                    <div t-if="doc.partner_id.vat">
-                        <strong>Siren : </strong> <span t-field="doc.partner_id.vat"/>
+                    <div style="margin-top: 10px;">
+                        <div t-if="doc.partner_id.phone">
+                            <strong>Téléphone :</strong> <span t-field="doc.partner_id.phone"/>
+                        </div>
+                        <div t-if="doc.partner_id.email">
+                            <strong>Email :</strong> <span t-field="doc.partner_id.email"/>
+                        </div>
+                        <div t-if="doc.partner_id.vat">
+                            <strong>Siren :</strong> <span t-field="doc.partner_id.vat"/>
+                        </div>
                     </div>
                 </div>
+            </t>
+        </xpath>
+
+
+        <xpath expr="//div[@id='informations']" position="replace">
+            <div id="informations" class="row mt-4 mb-2">
+                <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Date:</strong>
+                    <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
+                </div>
+                <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Expiration:</strong>
+                    <p class="m-0" t-field="doc.validity_date" t-options='{"widget": "date"}'/>
+                </div>
+                <div t-if="doc.installments" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Durée (mois):</strong>
+                    <p class="m-0" t-field="doc.installments"/>
+                </div>
+                <div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Référence client:</strong>
+                    <p class="m-0" t-field="doc.client_order_ref"/>
+                </div>
             </div>
-        </t>
-    </xpath>
+        </xpath>
 
 
-    <xpath expr="//div[@id='informations']" position="replace">
-        <div id="informations" class="row mt-4 mb-2">
-            <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
-                <strong>Date:</strong>
-                <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
-            </div>
-
-            <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2">
-                <strong>Expiration:</strong>
-                <p class="m-0" t-field="doc.validity_date" t-options='{"widget": "date"}'/>
-            </div>
-
-            <div t-if="doc.installments" class="col-auto col-3 mw-100 mb-2">
-                <strong>Durée (mois):</strong>
-                <p class="m-0" t-field="doc.installments"/>
-            </div>
-            
-            <div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2">
-                <strong>Référence client:</strong>
-                <p class="m-0" t-field="doc.client_order_ref"/>
-            </div>
-        </div>
-    </xpath>
+        <xpath expr="//th[@name='th_quantity']" position="replace">
+            <th name="th_quantity" class="text-end">Quantité</th>
+            <th name="th_loyer_unit" class="text-end">Loyer Unitaire</th>
+            <th name="th_ristourne" class="text-end">Ristourne en %</th>
+            <th name="th_loyer_mensuel" class="text-end">Loyer Mensuel</th>
+        </xpath>
+        <xpath expr="//th[@name='th_priceunit']" position="replace"/>
+        <xpath expr="//th[@name='th_subtotal']" position="replace"/>
+        <xpath expr="//th[@name='th_taxes']" position="replace"/>
 
 
-    <xpath expr="//th[@name='th_quantity']" position="replace">
-        <th name="th_quantity" class="text-end">Quantité</th>
-        <th name="th_loyer_unit" class="text-end">Loyer Unitaire</th>
-        <th name="th_ristourne" class="text-end">Ristourne en %</th>
-        <th name="th_loyer_mensuel" class="text-end">Loyer Mensuel</th>
-    </xpath>
-
-    <xpath expr="//th[@name='th_priceunit']" position="replace"/>
-    <xpath expr="//th[@name='th_subtotal']" position="replace"/>
-    <xpath expr="//th[@name='th_taxes']" position="replace"/>
-
-
-    <xpath expr="//td[@name='td_quantity']" position="replace">
-        <td name="td_quantity" class="text-end">
-            <span t-field="line.product_uom_qty"/>
-        </td>
-        
-        <td class="text-end">
-            <span t-field="line.price_quote" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
-        </td>
-
-        <td class="text-end">
-            <span t-field="line.discount_price"/> %
-        </td>
-
-        <td class="text-end o_price_total">
-             <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
-        </td>
-    </xpath>
-
-    <xpath expr="//td[@name='td_priceunit']" position="replace"/>
-    <xpath expr="//td[@name='td_subtotal']" position="replace"/>
-    <xpath expr="//td[@name='td_taxes']" position="replace"/>
+        <xpath expr="//td[@name='td_quantity']" position="replace">
+            <td name="td_quantity" class="text-end">
+                <span t-field="line.product_uom_qty"/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.price_quote" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.discount_price"/> %
+            </td>
+            <td class="text-end o_price_total">
+                <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+            </td>
+        </xpath>
+        <xpath expr="//td[@name='td_priceunit']" position="replace"/>
+        <xpath expr="//td[@name='td_subtotal']" position="replace"/>
+        <xpath expr="//td[@name='td_taxes']" position="replace"/>
 
 
-    <xpath expr="//div[@id='total']//table" position="inside">
-      <tr class="border-black o_subtotal">
-        <td><span>TVA (20%)</span></td>
-        <td class="text-end">
-          <span t-field="doc.amount_vat_20" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
-        </td>
-      </tr>
-      <tr class="border-black o_total">
-        <td><span>Total TTC</span></td>
-        <td class="text-end">
-          <span t-field="doc.amount_total_incl_vat_20" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
-        </td>
-      </tr>
-    </xpath>
+        <xpath expr="//div[@id='total']//table" position="inside">
+            <tr class="border-black o_subtotal">
+                <td><span>TVA (20%)</span></td>
+                <td class="text-end">
+                    <span t-field="doc.amount_vat_20" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                </td>
+            </tr>
+            <tr class="border-black o_total">
+                <td><span>Total TTC</span></td>
+                <td class="text-end">
+                    <span t-field="doc.amount_total_incl_vat_20" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                </td>
+            </tr>
+        </xpath>
 
-  </template>
+      </field>
+    </record>
+  </data>
 </odoo>
