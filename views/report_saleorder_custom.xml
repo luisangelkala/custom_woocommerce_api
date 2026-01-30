@@ -3,9 +3,32 @@
   <template id="report_saleorder_document_inherit_custom"
           inherit_id="sale.report_saleorder_document">
 
+    <xpath expr="//t[@t-set='address']" position="replace">
+        <t t-set="address">
+            <div t-field="doc.partner_id"
+                 t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'
+                 style="font-weight: bold; margin-bottom: 5px;"/>
+            
+            <div t-field="doc.partner_id"
+                 t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+            
+            <div class="mt-2">
+                <div t-if="doc.partner_id.phone">
+                    <strong>Téléphone :</strong> <span t-field="doc.partner_id.phone"/>
+                </div>
+                <div t-if="doc.partner_id.email">
+                    <strong>Email :</strong> <span t-field="doc.partner_id.email"/>
+                </div>
+                <div t-if="doc.partner_id.vat">
+                    <strong>Siren :</strong> <span t-field="doc.partner_id.vat"/>
+                </div>
+            </div>
+        </t>
+    </xpath>
+
+
     <xpath expr="//div[@id='informations']" position="replace">
         <div id="informations" class="row mt-4 mb-2">
-            
             <div t-if="doc.date_order" class="col-auto col-3 mw-100 mb-2">
                 <strong>Date:</strong>
                 <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
@@ -25,8 +48,7 @@
                 <strong>Référence client:</strong>
                 <p class="m-0" t-field="doc.client_order_ref"/>
             </div>
-
-            </div>
+        </div>
     </xpath>
 
 
