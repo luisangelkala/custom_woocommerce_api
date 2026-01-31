@@ -10,16 +10,70 @@
 
         <xpath expr="//div[@id='invoice_content']" position="before">
             <style>
-                /* Ocultar celdas de impuestos nativos */
-                #invoice_content table th.d-none.d-md-table-cell, 
-                #invoice_content table td.d-none.d-md-table-cell {
-                    display: none !important;
+                /* Aseguramos que nuestras clases personalizadas manden */
+                .custom-invoice-table th, .custom-invoice-table td {
+                    vertical-align: middle;
                 }
-                /* Ocultar totales originales */
+                /* Ocultar totales originales para usar los nuestros */
                 #total table tr:not(.custom-total) {
                     display: none !important;
                 }
             </style>
+        </xpath>
+
+        <xpath expr="//div[@id='invoice_content']" position="replace">
+            <div id="invoice_content" class="o_portal_invoice_content">
+                
+                <table class="table table-sm table-striped custom-invoice-table" name="invoice_line_table">
+                    <thead>
+                        <tr>
+                            <th class="text-start">Produit</th>
+                            <th class="text-end">Quantité</th>
+                            <th class="text-end">Prix</th>
+                            <th class="text-end">Disc.%</th>
+                            <th class="text-end">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="invoice_move.invoice_line_ids" t-as="line">
+                            <t t-if="not line.display_type"> <tr>
+                                    <td class="text-start">
+                                        <span t-field="line.product_id.name"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-field="line.quantity"/>
+                                        <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": line.move_id.currency_id}'/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-field="line.discount"/> %
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-field="line.price_total" t-options='{"widget": "monetary", "display_currency": line.move_id.currency_id}'/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="5" class="text-start small text-muted" style="border-top: none; padding-top: 0;">
+                                        <t t-if="line.include_full_service_warranty">
+                                            Inclut la garantie complète
+                                        </t>
+                                        <t t-else="">
+                                            Inclut la garantie standard
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
         </xpath>
 
         <xpath expr="//div[hasclass('o_portal_contact_details')]" position="replace">
@@ -59,52 +113,6 @@
                     </div>
                 </t>
             </div>
-        </xpath>
-
-        <xpath expr="//div[@id='invoice_content']//table//thead//tr" position="replace">
-            <tr>
-                <th class="text-start">Produit</th>
-                <th class="text-end">Quantité</th>
-                <th class="text-end">Prix</th>
-                <th class="text-end">Disc.%</th>
-                <th class="text-end">Montant</th>
-            </tr>
-        </xpath>
-
-        <xpath expr="//div[@id='invoice_content']//table//tbody//tr" position="replace">
-            <tr>
-                <td class="text-start">
-                    <span t-field="line.product_id.name"/>
-                </td>
-
-                <td class="text-end">
-                    <span t-field="line.quantity"/>
-                    <span t-field="line.product_uom_id" groups="uom.group_uom"/>
-                </td>
-
-                <td class="text-end">
-                    <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": invoice_move.currency_id}'/>
-                </td>
-
-                <td class="text-end">
-                    <span t-field="line.discount"/> %
-                </td>
-
-                <td class="text-end">
-                    <span t-field="line.price_total" t-options='{"widget": "monetary", "display_currency": invoice_move.currency_id}'/>
-                </td>
-            </tr>
-            
-            <tr>
-                <td colspan="5" class="text-start small text-muted" style="border-top: none; padding-top: 0;">
-                    <t t-if="line.include_full_service_warranty">
-                        Inclut la garantie complète
-                    </t>
-                    <t t-else="">
-                        Inclut la garantie standard
-                    </t>
-                </td>
-            </tr>
         </xpath>
 
         <xpath expr="//div[@id='total']//table" position="inside">
