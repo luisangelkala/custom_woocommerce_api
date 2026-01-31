@@ -5,13 +5,14 @@
       <field name="name">portal.invoice.page.inherit.custom</field>
       <field name="model">account.move</field>
       <field name="inherit_id" ref="account.portal_invoice_page"/>
-      <field name="priority">1000</field> <field name="arch" type="xml">
+      <field name="priority">1000</field>
+      <field name="arch" type="xml">
 
         <xpath expr="//div[@id='invoice_content']" position="before">
             <style>
                 /* Ocultar encabezados y celdas de impuestos originales */
-                #invoice_content th.d-none.d-md-table-cell, 
-                #invoice_content td.d-none.d-md-table-cell {
+                table[name='invoice_line_table'] th.d-none.d-md-table-cell, 
+                table[name='invoice_line_table'] td.d-none.d-md-table-cell {
                     display: none !important;
                 }
                 /* Ocultar totales originales */
@@ -60,7 +61,7 @@
             </div>
         </xpath>
 
-        <xpath expr="//table[@id='invoice_content']//thead//tr" position="replace">
+        <xpath expr="//table[@name='invoice_line_table']//thead//tr" position="replace">
             <tr>
                 <th class="text-start">Produit</th>
                 <th class="text-start">Description</th>
@@ -71,7 +72,7 @@
             </tr>
         </xpath>
 
-        <xpath expr="//table[@id='invoice_content']//tbody//tr" position="replace">
+        <xpath expr="//table[@name='invoice_line_table']//tbody//tr" position="replace">
             <tr>
                 <td class="text-start">
                     <span t-field="line.product_id.name"/>
