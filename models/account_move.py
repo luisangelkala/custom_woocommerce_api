@@ -55,15 +55,15 @@ class AccountMove(models.Model):
                 move._compute_custom_display_number()
         return res
 
-    @api.depends('amount_total', 'invoice_line_ids.price_unit', 'invoice_line_ids.quantity')
+    @api.depends('invoice_line_ids.price_subtotal', 'currency_id')
     def _compute_iva_20(self):
         for move in self:
-            total = sum((line.price_unit * line.quantity) for line in move.invoice_line_ids)
+            total_base = sum(line.price_subtotal for line in move.invoice_line_ids)
             
-            print(f"Computing IVA 20% for move {move.id}: total={total}")
+            vat_amount = move.currency_id.round(total_base * 0.2)
             
-            move.amount_vat_20 = move.currency_id.round(total * 0.2)
-            move.amount_total_incl_vat_20 = move.currency_id.round(total * 1.2)
+            move.amount_vat_20 = vat_amount
+            move.amount_total_incl_vat_20 = total_base + vat_amount
 
     @api.onchange('invoice_line_ids')
     def _onchange_recompute_iva_20(self):

@@ -22,7 +22,8 @@
 
       <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="attributes">
          <attribute name="string">Prix</attribute>
-         <attribute name="optional">show</attribute> </xpath>
+         <attribute name="optional">show</attribute>
+      </xpath>
 
       <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="after">
          <field name="discount" string="Disc.%" optional="show" style="width: 80px !important;"/>
@@ -35,8 +36,10 @@
 
 
       <xpath expr="//field[@name='amount_residual']" position="before">
-        <field name="amount_vat_20" string="TVA (20%)"/>
-        <field name="amount_total_incl_vat_20" string="Total TTC" decoration-bf="1"/>
+        <field name="amount_untaxed" string="Total" widget="monetary"/>
+        
+        <field name="amount_vat_20" string="TVA (20%)" widget="monetary"/>
+        <field name="amount_total_incl_vat_20" string="Total TTC" widget="monetary" decoration-bf="1"/>
       </xpath>
 
       <xpath expr="//sheet/notebook" position="inside">
