@@ -4,63 +4,70 @@
 
     <xpath expr="//t[@t-set='forced_vat']" position="after">
       <style>
-        /* Hide the blue 'Operation Type' strip injected by other modules */
+        /* Ocultar franja azul de 'Operation Type' */
         div[name='operation_type'] { display: none !important; }
       </style>
     </xpath>
 
-    <!-- Force report language context to French -->
     <xpath expr="//t[@t-set='o']" position="replace">
         <t t-set="o" t-value="o.with_context(lang='fr_FR')"/>
     </xpath>
 
-    <!-- Force table headers in French -->
+
     <xpath expr="//th[@name='th_description']" position="replace">
-        <th name="th_description">Description</th>
+        <th name="th_description" class="text-start">Produit</th>
     </xpath>
+
     <xpath expr="//th[@name='th_quantity']" position="replace">
-        <th name="th_quantity" style="text-align: right">Quantité</th>
+        <th name="th_quantity" class="text-end">Quantité</th>
     </xpath>
+
     <xpath expr="//th[@name='th_priceunit']" position="replace">
-        <th name="th_priceunit" style="text-align: right">Prix</th>
+        <th name="th_priceunit" class="text-end">Prix</th>
     </xpath>
+
+    <xpath expr="//th[@name='th_priceunit']" position="after">
+        <th name="th_discount" class="text-end">Disc.%</th>
+    </xpath>
+
     <xpath expr="//th[@name='th_subtotal']" position="replace">
-        <th name="th_subtotal" style="text-align: right">Montant</th>
+        <th name="th_subtotal" class="text-end">Montant</th>
     </xpath>
 
-    <xpath expr="//div[@name='due_date']" position="replace">
-      <div t-if="False"/>
+    <xpath expr="//th[@name='th_taxes']" position="replace"/>
+
+
+    <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
+      <td name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
+    </xpath>
+    
+    <xpath expr="//td[span[@t-field='line.price_unit']]" position="after">
+        <td class="text-end">
+            <span t-field="line.discount"/>
+        </td>
     </xpath>
 
-    <xpath expr="//div[@name='origin']" position="replace">
-      <div t-if="False"/>
-    </xpath>
-    <xpath expr="//strong[contains(text(), 'Invoice Date')]" position="replace">
-      <strong>Date:</strong>
-    </xpath>
+    <xpath expr="//td[@name='td_taxes']" position="replace"/>
 
-    <xpath expr="//p[@name='payment_communication']" position="replace">
-      <p t-if="False"/>
-    </xpath>
-
-    <xpath expr="//td[@name='td_subtotal']" position="replace">
-      <td name="td_subtotal" t-attf-class="text-end">
-        <span class="text-nowrap" t-field="line.price_total"/>
-      </td>
-    </xpath>
-    <!-- Add warranty line below subtotal -->
     <xpath expr="//td[@name='td_subtotal']" position="after">
       <tr>
-        <td t-if="line.include_full_service_warranty" class="text-start small" t-translate="Includes Full Warranty">
-          Inclut la garantie complète
+        <td colspan="5" class="text-start small border-0 pt-0">
+            <t t-if="line.include_full_service_warranty" class="text-start small">
+                 Inclut la garantie complète
+            </t>
+            <t t-else="" class="text-start small">
+                 Inclut la garantie standard
+            </t>
         </td>
-        <td t-else="line.include_full_service_warranty" class="text-start small" t-translate="Includes Standard Warranty">
-          Inclut la garantie standard
-        </td>
-        <td class="text-end"/>
-        <td class="text-end"/>
-        <td class="text-end"/>
       </tr>
+    </xpath>
+
+
+    <xpath expr="//div[@name='due_date']" position="replace"/>
+    <xpath expr="//div[@name='origin']" position="replace"/>
+    <xpath expr="//p[@name='payment_communication']" position="replace"/>
+    <xpath expr="//strong[contains(text(), 'Invoice Date')]" position="replace">
+      <strong>Date:</strong>
     </xpath>
 
     <xpath expr="//h2" position="replace">
@@ -71,57 +78,27 @@
       </h2>
     </xpath>
 
-    <!-- Hide Taxes column -->
-    <xpath expr="//th[@name='th_taxes']" position="replace">
-      <th t-if="False"/>
-    </xpath>
-    <xpath expr="//td[@name='td_taxes']" position="replace">
-      <td t-if="False"/>
-    </xpath>
 
-    <!-- Add TVA and Total TTC in French in the total area -->
     <xpath expr="//div[@id='total']//div//table[contains(@class, 'table-borderless')]" position="inside">
       <tr>
-        <td t-translate="TVA (20%) :">TVA (20%) :</td>
+        <td>TVA (20%) :</td>
         <td class="text-end">
           <span t-field="o.amount_vat_20"/>
         </td>
       </tr>
       <tr>
-        <td><strong t-translate="Total TTC :">Total TTC :</strong></td>
+        <td><strong>Total TTC :</strong></td>
         <td class="text-end">
           <strong t-field="o.amount_total_incl_vat_20"/>
         </td>
       </tr>
     </xpath>
 
-    <xpath expr="//table[@name='invoice_line_table']//thead//tr//th[@name='th_description']" position="after">
-      <!-- If you prefer French (you force fr_FR above), use 'Fournisseur' -->
-      <th name="th_provider" class="text-start"><span>Description</span></th>
-      <!-- <th name="th_provider" class="text-start"><span>Fournisseur</span></th> -->
-    </xpath>
-
-    <xpath expr="//table[@name='invoice_line_table']//thead//tr//th[@name='th_description']" position="replace">
-      <!-- If you prefer French (you force fr_FR above), use 'Fournisseur' -->
-      <th name="th_description" class="text-start"><span>Produit</span></th>
-      <!-- <th name="th_provider" class="text-start"><span>Fournisseur</span></th> -->
-    </xpath>
-
-    <!-- BODY: add cell after the product 'name' cell -->
-    <xpath expr="//table[@name='invoice_line_table']//tbody//td[@name='account_invoice_line_name']"
-           position="after">
-      <td name="td_provider" class="text-start">
-        <!-- Show your open text; blank if not set -->
-        <span t-esc="line.x_description or ''"/>
-      </td>
-    </xpath>
-
   </template>
 
+
   <template id="hide_footer_email" inherit_id="web.external_layout_standard">
-    <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace">
-      <!-- Removed / replaced with nothing -->
-    </xpath>
+    <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace"/>
     <xpath expr="//div[@name='company_address']" position="replace">
         <ul class="list-unstyled" style="padding-top: 2rem">
           <li>Leasymat</li>
@@ -141,34 +118,16 @@
             <t t-if="o.financing_agency_id">
               <li><span t-field="o.financing_agency_id.name"/></li>
               <li><span t-field="o.financing_agency_id.address"/></li>
-              <li>
-                Téléphone :
-                <span t-field="o.financing_agency_id.phone"/>
-              </li>
-              <li>
-                Email :
-                <span t-field="o.financing_agency_id.email"/>
-              </li>
-              <li>
-                Siren :
-                <span t-field="o.financing_agency_id.siren"/>
-              </li>
+              <li>Tél : <span t-field="o.financing_agency_id.phone"/></li>
+              <li>Email : <span t-field="o.financing_agency_id.email"/></li>
+              <li>Siren : <span t-field="o.financing_agency_id.siren"/></li>
             </t>
             <t t-else="">
               <li><span t-field="o.partner_id.name"/></li>
               <li><span t-field="o.partner_id.contact_address"/></li>
-              <li>
-                Téléphone :
-                <span t-field="o.partner_id.phone"/>
-              </li>
-              <li>
-                Email :
-                <span t-field="o.partner_id.email"/>
-              </li>
-              <li>
-                Siren :
-                <span t-field="o.partner_id.siren"/>
-              </li>
+              <li>Tél : <span t-field="o.partner_id.phone"/></li>
+              <li>Email : <span t-field="o.partner_id.email"/></li>
+              <li>Siren : <span t-field="o.partner_id.siren"/></li>
             </t>
           </ul>
         </div>
