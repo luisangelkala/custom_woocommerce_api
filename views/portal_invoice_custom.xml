@@ -10,12 +10,10 @@
 
         <xpath expr="//div[@id='invoice_content']" position="before">
             <style>
-                .custom-invoice-table th, .custom-invoice-table td {
-                    vertical-align: middle;
-                }
+                .custom-invoice-table th, .custom-invoice-table td { vertical-align: middle; }
+                .debug-info { color: red; font-size: 10px; font-weight: bold; display: block; }
             </style>
         </xpath>
-
 
         <xpath expr="//div[@id='invoice_content']" position="replace">
             <div id="invoice_content" class="o_portal_invoice_content">
@@ -25,7 +23,7 @@
                         <tr>
                             <th class="text-start">Produit</th>
                             <th class="text-end">Quantité</th>
-                            <th class="text-end">Prix</th>
+                            <th class="text-end">Prix (DEBUG)</th>
                             <th class="text-end">Disc.%</th>
                             <th class="text-end">Montant</th>
                         </tr>
@@ -34,36 +32,27 @@
                         <t t-foreach="invoice_move.invoice_line_ids" t-as="line">
                             <t t-if="not line.display_type"> 
                                 <tr>
-                                    <td class="text-start">
-                                        <span t-field="line.product_id.name"/>
-                                    </td>
-
-                                    <td class="text-end">
-                                        <span t-field="line.quantity"/>
-                                        <span t-field="line.product_uom_id" groups="uom.group_uom"/>
-                                    </td>
+                                    <td class="text-start"><span t-field="line.product_id.name"/></td>
+                                    <td class="text-end"><span t-field="line.quantity"/></td>
 
                                     <td class="text-end">
                                         <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": invoice_move.currency_id}'/>
+                                        
+                                        <span class="debug-info">RAW: <t t-esc="line.price_unit"/></span>
+                                        
+                                        <span class="debug-info">CUR: <t t-esc="invoice_move.currency_id.name"/></span>
+                                        <span class="debug-info">SYM: <t t-esc="invoice_move.currency_id.symbol"/></span>
                                     </td>
 
-                                    <td class="text-end">
-                                        <span t-field="line.discount"/> %
-                                    </td>
-
+                                    <td class="text-end"><span t-field="line.discount"/> %</td>
                                     <td class="text-end">
                                         <span t-field="line.price_total" t-options='{"widget": "monetary", "display_currency": invoice_move.currency_id}'/>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td colspan="5" class="text-start small text-muted" style="border-top: none; padding-top: 0;">
-                                        <t t-if="line.include_full_service_warranty">
-                                            Inclut la garantie complète
-                                        </t>
-                                        <t t-else="">
-                                            Inclut la garantie standard
-                                        </t>
+                                        <t t-if="line.include_full_service_warranty">Inclut la garantie complète</t>
+                                        <t t-else="">Inclut la garantie standard</t>
                                     </td>
                                 </tr>
                             </t>
@@ -89,48 +78,11 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </xpath>
 
-
         <xpath expr="//div[hasclass('o_portal_contact_details')]" position="replace">
-            <div class="o_portal_contact_details d-flex flex-column gap-2">
-                <t t-if="invoice_move.financing_agency_id">
-                    <div class="d-flex justify-content-start align-items-center gap-2">
-                        <div>
-                            <h6 class="mb-0" t-field="invoice_move.financing_agency_id.name"/>
-                            <div t-field="invoice_move.financing_agency_id.address"/>
-                            <div t-if="invoice_move.financing_agency_id.phone">
-                                <strong>Téléphone :</strong> <span t-field="invoice_move.financing_agency_id.phone"/>
-                            </div>
-                            <div t-if="invoice_move.financing_agency_id.email">
-                                <strong>Email :</strong> <span t-field="invoice_move.financing_agency_id.email"/>
-                            </div>
-                            <div t-if="invoice_move.financing_agency_id.siren">
-                                <strong>Siren :</strong> <span t-field="invoice_move.financing_agency_id.siren"/>
-                            </div>
-                        </div>
-                    </div>
-                </t>
-                <t t-else="">
-                    <div class="d-flex justify-content-start align-items-center gap-2">
-                        <div>
-                            <h6 class="mb-0" t-field="invoice_move.partner_id.name"/>
-                            <div t-field="invoice_move.partner_id.contact_address"/>
-                            <div t-if="invoice_move.partner_id.phone">
-                                <strong>Téléphone :</strong> <span t-field="invoice_move.partner_id.phone"/>
-                            </div>
-                            <div t-if="invoice_move.partner_id.email">
-                                <strong>Email :</strong> <span t-field="invoice_move.partner_id.email"/>
-                            </div>
-                            <div t-if="invoice_move.partner_id.siren">
-                                <strong>Siren :</strong> <span t-field="invoice_move.partner_id.siren"/>
-                            </div>
-                        </div>
-                    </div>
-                </t>
-            </div>
+             <div class="o_portal_contact_details"><p>Sidebar OK</p></div>
         </xpath>
 
       </field>
