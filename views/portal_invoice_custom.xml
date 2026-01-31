@@ -10,9 +10,8 @@
 
         <xpath expr="//div[@id='invoice_content']" position="before">
             <style>
-                .custom-invoice-table th, .custom-invoice-table td {
-                    vertical-align: middle;
-                }
+                .custom-invoice-table th, .custom-invoice-table td { vertical-align: middle; }
+                .debug-box { border: 2px solid red; background: yellow; color: black; font-weight: bold; font-size: 11px; padding: 5px; }
             </style>
         </xpath>
 
@@ -24,8 +23,7 @@
                         <tr>
                             <th class="text-start">Produit</th>
                             <th class="text-end">Quantité</th>
-                            <th class="text-end">Prix</th>
-                            <th class="text-end">Disc.%</th>
+                            <th class="text-end" style="color: red;">DEBUG PRIX</th> <th class="text-end">Disc.%</th>
                             <th class="text-end">Montant</th>
                         </tr>
                     </thead>
@@ -33,37 +31,27 @@
                         <t t-foreach="invoice_move.invoice_line_ids" t-as="line">
                             <t t-if="not line.display_type"> 
                                 <tr>
-                                    <td class="text-start">
-                                        <span t-field="line.product_id.name"/>
-                                    </td>
+                                    <td class="text-start"><span t-field="line.product_id.name"/></td>
+                                    <td class="text-end"><span t-field="line.quantity"/></td>
 
-                                    <td class="text-end">
-                                        <span t-field="line.quantity"/>
-                                        <span t-field="line.product_uom_id" groups="uom.group_uom"/>
-                                    </td>
+                                    <td class="text-end debug-box">
+                                        <span>TEST: HOLA</span><br/>
+                                        
+                                        <span>NORMAL: <t t-esc="line.price_unit"/></span><br/>
 
-                                    <td class="text-end">
-                                        <span t-esc="line.price_unit" t-options='{"widget": "float", "precision": 2}'/>
-                                        <span t-esc="invoice_move.currency_id.symbol"/>
-                                    </td>
+                                        <span>SUDO: <t t-esc="line.sudo().price_unit"/></span><br/>
 
-                                    <td class="text-end">
-                                        <span t-field="line.discount"/> %
+                                        <span>SUB: <t t-esc="line.price_subtotal"/></span>
                                     </td>
-
+                                    <td class="text-end"><span t-field="line.discount"/> %</td>
                                     <td class="text-end">
                                         <span t-field="line.price_total" t-options='{"widget": "monetary", "display_currency": invoice_move.currency_id}'/>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td colspan="5" class="text-start small text-muted" style="border-top: none; padding-top: 0;">
-                                        <t t-if="line.include_full_service_warranty">
-                                            Inclut la garantie complète
-                                        </t>
-                                        <t t-else="">
-                                            Inclut la garantie standard
-                                        </t>
+                                        <t t-if="line.include_full_service_warranty">Inclut la garantie complète</t>
+                                        <t t-else="">Inclut la garantie standard</t>
                                     </td>
                                 </tr>
                             </t>
