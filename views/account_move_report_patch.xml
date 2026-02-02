@@ -5,11 +5,12 @@
     <xpath expr="//t[@t-set='forced_vat']" position="after">
       <style>
         div[name='operation_type'] { display: none !important; }
+        .text-nowrap { white-space: nowrap; }
       </style>
     </xpath>
 
     <xpath expr="//t[@t-set='o']" position="replace">
-        <t t-set="o" t-value="o.with_context(lang='fr_FR')"/>
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
     </xpath>
 
     <xpath expr="//table[@name='invoice_line_table']//thead" position="replace">
@@ -26,21 +27,19 @@
 
     <xpath expr="//table[@name='invoice_line_table']//tbody" position="replace">
         <tbody class="invoice_tbody">
-            <t t-set="current_subtotal" t-value="0"/>
             <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
-                <t t-if="not line.display_type" name="account_invoice_line_accountable">
-                    <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
-                        
+                <t t-if="not line.display_type">
+                    <tr>
                         <td name="account_invoice_line_name">
-                            <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
+                            <span t-field="line.product_id.name"/>
                         </td>
 
                         <td class="text-end">
                             <span t-esc="int(line.quantity or 0)"/>
-                            <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+                            <span t-field="line.product_uom_id"/>
                         </td>
 
-                        <td class="text-end">
+                        <td class="text-end text-nowrap">
                             <span t-esc="int(line.sudo().price_unit or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
@@ -49,7 +48,7 @@
                             <span t-esc="int(line.discount or 0)"/> %
                         </td>
 
-                        <td class="text-end o_price_total">
+                        <td class="text-end text-nowrap">
                             <span t-esc="int(line.price_total or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
@@ -57,28 +56,20 @@
                     
                     <tr>
                          <td colspan="5" class="text-start small border-0 pt-0 text-muted">
-                            <t t-if="line.include_full_service_warranty">
-                                Inclut la garantie complète
-                            </t>
-                            <t t-else="">
-                                Inclut la garantie standard
-                            </t>
+                            <t t-if="line.include_full_service_warranty">Inclut la garantie complète</t>
+                            <t t-else="">Inclut la garantie standard</t>
                         </td>
                     </tr>
                 </t>
 
                 <t t-if="line.display_type == 'line_section'">
                     <tr class="bg-200 fw-bold o_line_section">
-                        <td colspan="99">
-                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
-                        </td>
+                        <td colspan="99"><span t-field="line.name"/></td>
                     </tr>
                 </t>
                 <t t-if="line.display_type == 'line_note'">
                     <tr class="fst-italic o_line_note">
-                        <td colspan="99">
-                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
-                        </td>
+                        <td colspan="99"><span t-field="line.name"/></td>
                     </tr>
                 </t>
             </t>
@@ -120,12 +111,23 @@
 
     <xpath expr="//h2" position="replace">
       <h2>
-        <span t-esc="o.invoice_title or (o.move_type == 'out_invoice' and 'Facture' or 'Devis')"/>
+        <span t-esc="o.invoice_title or 'Facture'"/>
         <span> </span>
         <span t-field="o.custom_display_number"/>
       </h2>
     </xpath>
 
+  </template>
+
+
+  <template id="hide_footer_email" inherit_id="web.external_layout_standard">
+    <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace"/>
+    <xpath expr="//div[@name='company_address']" position="replace">
+        <ul class="list-unstyled" style="padding-top: 2rem">
+          <li>Leasymat</li>
+          <li>7 passage turquetil, 75011 Paris</li>
+        </ul>
+    </xpath>
   </template>
 
   <template id="custom_replace_address_layout" inherit_id="web.address_layout">
@@ -136,17 +138,11 @@
             <t t-if="o and o.financing_agency_id">
               <li><strong><span t-field="o.financing_agency_id.name"/></strong></li>
               <li><span t-field="o.financing_agency_id.address"/></li>
-              <li t-if="o.financing_agency_id.phone">Tél : <span t-field="o.financing_agency_id.phone"/></li>
-              <li t-if="o.financing_agency_id.email">Email : <span t-field="o.financing_agency_id.email"/></li>
-              <li t-if="o.financing_agency_id.siren">Siren : <span t-field="o.financing_agency_id.siren"/></li>
             </t>
             <t t-else="">
               <t t-if="o and o.partner_id">
                   <li><strong><span t-field="o.partner_id.name"/></strong></li>
                   <li><span t-field="o.partner_id.contact_address"/></li>
-                  <li t-if="o.partner_id.phone">Tél : <span t-field="o.partner_id.phone"/></li>
-                  <li t-if="o.partner_id.email">Email : <span t-field="o.partner_id.email"/></li>
-                  <li t-if="o.partner_id.siren">Siren : <span t-field="o.partner_id.siren"/></li>
               </t>
             </t>
           </ul>
