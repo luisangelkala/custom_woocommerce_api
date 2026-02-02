@@ -2,6 +2,17 @@
 <odoo>
     <template id="report_invoice_document_patch" inherit_id="account.report_invoice_document" priority="99">
         
+        <xpath expr="//t[@t-set='forced_vat']" position="after">
+            <style>
+                div[name='operation_type'] { display: none !important; }
+                .text-nowrap { white-space: nowrap; }
+            </style>
+        </xpath>
+
+        <xpath expr="//t[@t-set='o']" position="replace">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        </xpath>
+
         <xpath expr="//h2" position="replace">
             <h2>
                 <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Facture</span>
@@ -27,11 +38,13 @@
 
         <xpath expr="//table[@name='invoice_line_table']//tbody" position="replace">
             <tbody class="invoice_tbody">
-                <t t-foreach="o.invoice_line_ids.sudo()" t-as="line">
+                <t t-set="lines" t-value="o.invoice_line_ids.sudo()"/>
+                
+                <t t-foreach="lines" t-as="line">
                     <t t-if="not line.display_type">
                         <tr>
                             <td name="account_invoice_line_name">
-                                <span t-field="line.product_id.name"/>
+                                <span t-field="line.name"/>
                             </td>
 
                             <td class="text-end">
@@ -39,16 +52,18 @@
                                 <span t-field="line.product_uom_id" groups="uom.group_uom"/>
                             </td>
 
-                            <td class="text-end">
-                                <span t-field="line.price_unit"/>
+                            <td class="text-end text-nowrap">
+                                <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                             </td>
 
                             <td class="text-end">
-                                <span t-field="line.discount"/> <span t-if="line.discount">%</span>
+                                <span t-if="line.discount > 0">
+                                    <span t-field="line.discount"/> %
+                                </span>
                             </td>
 
-                            <td class="text-end o_price_total">
-                                <span t-field="line.price_subtotal"/>
+                            <td class="text-end text-nowrap o_price_total">
+                                <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                             </td>
                         </tr>
                         
@@ -76,7 +91,7 @@
 
         <xpath expr="//div[@id='total']//table" position="replace">
             <table class="table table-sm" style="page-break-inside: avoid;">
-                <tr class="border-black o_subtotal" style="">
+                <tr class="border-black o_subtotal">
                     <td><strong>Total</strong></td>
                     <td class="text-end">
                         <span t-field="o.amount_untaxed"/>
