@@ -12,125 +12,89 @@
         <t t-set="o" t-value="o.with_context(lang='fr_FR')"/>
     </xpath>
 
-    <xpath expr="//th[@name='th_discount']" position="replace"/>
-    <xpath expr="//th[@name='th_taxes']" position="replace"/>
-
-
     <xpath expr="//th[@name='th_description']" position="replace">
         <th name="th_description" class="text-start">Produit</th>
     </xpath>
-
     <xpath expr="//th[@name='th_quantity']" position="replace">
         <th name="th_quantity" class="text-end">Quantité</th>
     </xpath>
-
     <xpath expr="//th[@name='th_priceunit']" position="replace">
         <th name="th_priceunit" class="text-end">Prix</th>
     </xpath>
-
-    <xpath expr="//th[@name='th_priceunit']" position="after">
-        <th name="th_discount_custom" class="text-end">Disc.%</th>
-    </xpath>
-
     <xpath expr="//th[@name='th_subtotal']" position="replace">
         <th name="th_subtotal" class="text-end">Montant</th>
     </xpath>
 
-
-    <xpath expr="//td[@name='td_discount']" position="replace"/>
-    <xpath expr="//td[@name='td_taxes']" position="replace"/>
-
-    <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
-      <td name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
+    <xpath expr="//th[@name='th_taxes']" position="replace"/>
+    <xpath expr="//th[@name='th_priceunit']" position="after">
+        <th class="text-end">Disc.%</th>
     </xpath>
 
-    <xpath expr="//td[span[@t-field='line.price_unit']]" position="after">
-        <td class="text-end">
-            <span t-field="line.discount"/>
-        </td>
-    </xpath>
+    <xpath expr="//tbody//tr" position="replace">
+        <tr t-foreach="o.invoice_line_ids" t-as="line">
+             <t t-if="not line.display_type">
+                <td name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
+                
+                <td class="text-end">
+                    <span t-esc="'%.0f' % line.quantity"/>
+                </td>
 
-    <xpath expr="//td[@name='td_subtotal']" position="after">
-      <tr>
-        <td colspan="5" class="text-start small border-0 pt-0">
-            <t t-if="line.include_full_service_warranty">
-                 Inclut la garantie complète
+                <td class="text-end">
+                    <span t-esc="'%.0f' % line.sudo().price_unit"/>
+                    <span t-esc="o.currency_id.symbol"/>
+                </td>
+
+                <td class="text-end">
+                    <span t-esc="'%.0f' % line.discount"/> %
+                </td>
+
+                <td class="text-end">
+                    <span t-esc="'%.0f' % line.price_total"/>
+                    <span t-esc="o.currency_id.symbol"/>
+                </td>
             </t>
-            <t t-else="">
-                 Inclut la garantie standard
+            <t t-if="line.display_type == 'line_section'">
+                <td colspan="99">
+                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                </td>
             </t>
-        </td>
-      </tr>
-    </xpath>
+            <t t-if="line.display_type == 'line_note'">
+                <td colspan="99">
+                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                </td>
+            </t>
+        </tr>
+        </xpath>
 
+    <xpath expr="//div[@id='total']//div//table" position="replace">
+        <table class="table table-sm table-borderless">
+            <tr>
+                <td><strong>Total</strong></td>
+                <td class="text-end">
+                    <span t-esc="'%.0f' % o.amount_untaxed"/>
+                    <span t-esc="o.currency_id.symbol"/>
+                </td>
+            </tr>
+            <tr>
+                <td>TVA (20%) :</td>
+                <td class="text-end">
+                    <span t-esc="'%.0f' % o.amount_vat_20"/>
+                    <span t-esc="o.currency_id.symbol"/>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Total TTC :</strong></td>
+                <td class="text-end">
+                    <strong t-esc="'%.0f' % o.amount_total_incl_vat_20"/>
+                    <strong t-esc="o.currency_id.symbol"/>
+                </td>
+            </tr>
+        </table>
+    </xpath>
 
     <xpath expr="//div[@name='due_date']" position="replace"/>
     <xpath expr="//div[@name='origin']" position="replace"/>
     <xpath expr="//p[@name='payment_communication']" position="replace"/>
-    <xpath expr="//strong[contains(text(), 'Invoice Date')]" position="replace">
-      <strong>Date:</strong>
-    </xpath>
 
-    <xpath expr="//h2" position="replace">
-      <h2>
-        <span t-esc="o.invoice_title or (o.move_type == 'out_invoice' and 'Facture' or 'Devis')"/>
-        <span> </span>
-        <span t-field="o.custom_display_number"/>
-      </h2>
-    </xpath>
-
-    <xpath expr="//div[@id='total']//div//table[contains(@class, 'table-borderless')]" position="inside">
-      <tr>
-        <td>TVA (20%) :</td>
-        <td class="text-end">
-          <span t-field="o.amount_vat_20"/>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Total TTC :</strong></td>
-        <td class="text-end">
-          <strong t-field="o.amount_total_incl_vat_20"/>
-        </td>
-      </tr>
-    </xpath>
-
-  </template>
-
-  <template id="hide_footer_email" inherit_id="web.external_layout_standard">
-    <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace"/>
-    <xpath expr="//div[@name='company_address']" position="replace">
-        <ul class="list-unstyled" style="padding-top: 2rem">
-          <li>Leasymat</li>
-          <li>7 passage turquetil, 75011 Paris</li>
-          <li>Téléphone : 01 48 96 24 45</li>
-          <li>Email : commercial@leasymat.fr</li>
-          <li>Siren : 983 918 996</li>
-        </ul>
-    </xpath>
-  </template>
-
-  <template id="custom_replace_address_layout" inherit_id="web.address_layout">
-    <xpath expr="." position="replace">
-      <div class="row">
-        <div class="col-6 offset-6 text-end">
-          <ul class="list-unstyled">
-            <t t-if="o.financing_agency_id">
-              <li><span t-field="o.financing_agency_id.name"/></li>
-              <li><span t-field="o.financing_agency_id.address"/></li>
-              <li>Tél : <span t-field="o.financing_agency_id.phone"/></li>
-              <li>Email : <span t-field="o.financing_agency_id.email"/></li>
-              <li>Siren : <span t-field="o.financing_agency_id.siren"/></li>
-            </t>
-            <t t-else="">
-              <li><span t-field="o.partner_id.name"/></li>
-              <li><span t-field="o.partner_id.contact_address"/></li>
-              <li>Tél : <span t-field="o.partner_id.phone"/></li>
-              <li>Email : <span t-field="o.partner_id.email"/></li>
-              <li>Siren : <span t-field="o.partner_id.siren"/></li>
-            </t>
-          </ul>
-        </div>
-      </div>
-    </xpath>
   </template>
 </odoo>
