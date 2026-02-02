@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Modificar solo el reporte PDF de factura -->
-    <template id="report_invoice_document_patch" inherit_id="account.report_invoice_document" priority="100">
+    <template id="report_invoice_document_patch" inherit_id="account.report_invoice_document" priority="99">
         
-        <!-- Cambiar título según estado -->
-        <xpath expr="//h2/span[@t-if=\"o.move_type == 'out_invoice' and o.state == 'posted'\"]" position="attributes">
-            <attribute name="t-if">o.move_type == 'out_invoice' and o.state == 'posted'</attribute>
-        </xpath>
-        
-        <xpath expr="//h2" position="inside">
-            <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'">Devis</span>
+        <!-- Cambiar título a "Devis" para borradores -->
+        <xpath expr="//h2" position="replace">
+            <h2>
+                <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Facture</span>
+                <span t-elif="o.move_type == 'out_invoice'">Devis</span>
+                <span t-elif="o.move_type == 'out_refund'">Avoir</span>
+                <span t-elif="o.move_type == 'in_refund'">Avoir Fournisseur</span>
+                <span t-elif="o.move_type == 'in_invoice'">Facture Fournisseur</span>
+            </h2>
         </xpath>
 
-        <!-- Traducir encabezados de tabla -->
+        <!-- Traducir headers de la tabla -->
         <xpath expr="//th[@name='th_description']/span" position="replace">
             <span>Produit</span>
         </xpath>
