@@ -1,149 +1,154 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="report_invoice_document_inherit_warranty" inherit_id="account.report_invoice_document">
-
-    <xpath expr="//t[@t-set='forced_vat']" position="after">
-      <style>
-        div[name='operation_type'] { display: none !important; }
-        .text-nowrap { white-space: nowrap; }
-      </style>
-    </xpath>
-
-    <xpath expr="//t[@t-set='o']" position="replace">
-        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
-    </xpath>
-
-    <xpath expr="//table[@name='invoice_line_table']//thead" position="replace">
-        <thead>
-            <tr>
-                <th name="th_description" class="text-start">Produit</th>
-                <th name="th_quantity" class="text-end">Quantité</th>
-                <th name="th_priceunit" class="text-end">Prix</th>
-                <th name="th_discount" class="text-end">Disc.%</th>
-                <th name="th_subtotal" class="text-end">Montant</th>
-            </tr>
-        </thead>
-    </xpath>
-
-    <xpath expr="//table[@name='invoice_line_table']//tbody" position="replace">
-        <tbody class="invoice_tbody">
-            <t t-foreach="o.invoice_line_ids.sudo().sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
-                <t t-if="not line.display_type">
-                    <tr>
-                        <td name="account_invoice_line_name">
-                            <span t-field="line.product_id.name"/>
-                        </td>
-                        <td class="text-end">
-                            <span t-esc="int(line.quantity or 0)"/>
-                            <span t-field="line.product_uom_id"/>
-                        </td>
-                        <td class="text-end text-nowrap">
-                            <span t-esc="int(line.price_unit or 0)"/>
-                            <span t-esc="o.currency_id.symbol"/>
-                        </td>
-                        <td class="text-end">
-                            <span t-esc="int(line.discount or 0)"/> %
-                        </td>
-                        <td class="text-end text-nowrap">
-                            <span t-esc="int(line.price_total or 0)"/>
-                            <span t-esc="o.currency_id.symbol"/>
-                        </td>
-                    </tr>
-                    <tr>
-                         <td colspan="5" class="text-start small border-0 pt-0 text-muted">
-                            <t t-if="line.include_full_service_warranty">Inclut la garantie complète</t>
-                            <t t-else="">Inclut la garantie standard</t>
-                        </td>
-                    </tr>
+    <!-- Heredar y reemplazar completamente el template de reporte de factura -->
+    <template id="report_invoice_document_patch" inherit_id="account.report_invoice_document">
+        
+        <!-- Eliminar el contenido original completo -->
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="address">
+                    <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    <p t-if="o.partner_id.vat">
+                        <t t-if="o.company_id.account_fiscal_country_id.vat_label" t-out="o.company_id.account_fiscal_country_id.vat_label"/>
+                        <t t-else="">Tax ID</t>: 
+                        <span t-field="o.partner_id.vat"/>
+                    </p>
                 </t>
 
-                <t t-if="line.display_type == 'line_section'">
-                    <tr class="bg-200 fw-bold o_line_section">
-                        <td colspan="99"><span t-field="line.name"/></td>
-                    </tr>
-                </t>
-                <t t-if="line.display_type == 'line_note'">
-                    <tr class="fst-italic o_line_note">
-                        <td colspan="99"><span t-field="line.name"/></td>
-                    </tr>
-                </t>
+                <div class="page">
+                    <h2>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Facture</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'">Devis</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state not in ['posted', 'draft']">Devis</span>
+                        <span t-if="o.move_type == 'out_refund'">Credit Note</span>
+                        <span t-if="o.move_type == 'in_refund'">Vendor Credit Note</span>
+                        <span t-if="o.move_type == 'in_invoice'">Vendor Bill</span>
+                    </h2>
+
+                    <div id="informations" class="row mt-4 mb-4">
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.invoice_date" name="invoice_date">
+                            <strong>Date:</strong>
+                            <p class="m-0" t-field="o.invoice_date"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-elif="o.date" name="date">
+                            <strong>Date:</strong>
+                            <p class="m-0" t-field="o.date"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'" name="due_date">
+                            <strong>Due Date:</strong>
+                            <p class="m-0" t-field="o.invoice_date_due"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.invoice_origin" name="origin">
+                            <strong>Source:</strong>
+                            <p class="m-0" t-field="o.invoice_origin"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.partner_id.ref" name="customer_code">
+                            <strong>Customer Code:</strong>
+                            <p class="m-0" t-field="o.partner_id.ref"/>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.ref" name="reference">
+                            <strong>Reference:</strong>
+                            <p class="m-0" t-field="o.ref"/>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de líneas de factura -->
+                    <table class="table table-sm o_main_table table-borderless mt-4" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <th name="th_description" class="text-start"><span>Produit</span></th>
+                                <th name="th_quantity" class="text-end"><span>Quantité</span></th>
+                                <th name="th_priceunit" class="text-end"><span>Prix</span></th>
+                                <th name="th_discount" class="text-end"><span>Disc.%</span></th>
+                                <th name="th_subtotal" class="text-end"><span>Montant</span></th>
+                                <th name="th_warranty" class="text-end"><span>%</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <!-- Iterar sobre las líneas de factura -->
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.name, -l.id), reverse=True)"/>
+
+                            <t t-foreach="lines" t-as="line">
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                                <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                    <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
+                                        <td name="account_invoice_line_name"><span t-field="line.name" t-options="{'widget': 'text'}"/></td>
+                                        <td class="text-end">
+                                            <span t-field="line.quantity"/>
+                                            <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="text-nowrap" t-field="line.price_unit"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="text-nowrap" t-field="line.discount"/>
+                                        </td>
+                                        <td class="text-end o_price_total">
+                                            <span class="text-nowrap" t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                            <span class="text-nowrap" t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-if="line.warranty_percentage" t-field="line.warranty_percentage"/>
+                                        </td>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_section'">
+                                        <td colspan="99">
+                                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                        </td>
+                                        <t t-set="current_section" t-value="line"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_note'">
+                                        <td colspan="99">
+                                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Totales -->
+                    <div class="clearfix">
+                        <div id="total" class="row">
+                            <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                                <table class="table table-sm table-borderless" style="page-break-inside: avoid;">
+                                    <!-- Subtotal -->
+                                    <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                    <t t-call="account.document_tax_totals"/>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Garantías -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <p t-if="o.has_full_warranty">
+                                <strong>✓ Inclut la garantie complète</strong>
+                            </p>
+                            <p t-if="o.has_standard_warranty">
+                                <strong>✓ Inclut la garantie standard</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Términos y condiciones -->
+                    <p t-if="o.narration" name="narration">
+                        <span t-field="o.narration"/>
+                    </p>
+                    <p t-if="o.fiscal_position_id.note" name="note">
+                        <span t-field="o.fiscal_position_id.note"/>
+                    </p>
+                    <p t-if="o.invoice_payment_term_id" name="payment_term">
+                        <span t-field="o.invoice_payment_term_id.note"/>
+                    </p>
+                </div>
             </t>
-        </tbody>
-    </xpath>
-
-    <xpath expr="//div[@id='total']//div//table" position="replace">
-        <table class="table table-sm table-borderless">
-            <tr>
-                <td><strong>Total</strong></td>
-                <td class="text-end">
-                    <span t-esc="int(o.amount_untaxed or 0)"/>
-                    <span t-esc="o.currency_id.symbol"/>
-                </td>
-            </tr>
-            <tr>
-                <td>TVA (20%) :</td>
-                <td class="text-end">
-                    <span t-esc="int(o.amount_vat_20 or 0)"/>
-                    <span t-esc="o.currency_id.symbol"/>
-                </td>
-            </tr>
-            <tr class="border-black o_total">
-                <td><strong>Total TTC :</strong></td>
-                <td class="text-end">
-                    <strong t-esc="int(o.amount_total_incl_vat_20 or 0)"/>
-                    <strong t-esc="o.currency_id.symbol"/>
-                </td>
-            </tr>
-        </table>
-    </xpath>
-
-    <xpath expr="//div[@name='due_date']" position="replace"/>
-    <xpath expr="//div[@name='origin']" position="replace"/>
-    <xpath expr="//p[@name='payment_communication']" position="replace"/>
-    <xpath expr="//div[@name='invoice_date']" position="replace">
-        <div class="col-auto col-3 mw-100 mb-2" name="invoice_date">
-            <strong>Date:</strong>
-            <p class="m-0" t-field="o.invoice_date"/>
-        </div>
-    </xpath>
-
-    <xpath expr="//h2" position="replace">
-      <h2>
-        <span t-esc="o.invoice_title or 'Facture'"/>
-        <span> </span>
-        <span t-field="o.custom_display_number"/>
-      </h2>
-    </xpath>
-  </template>
-
-  <template id="hide_footer_email" inherit_id="web.external_layout_standard">
-    <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace"/>
-    <xpath expr="//div[@name='company_address']" position="replace">
-        <ul class="list-unstyled" style="padding-top: 2rem">
-          <li>Leasymat</li>
-          <li>7 passage turquetil, 75011 Paris</li>
-        </ul>
-    </xpath>
-  </template>
-
-  <template id="custom_replace_address_layout" inherit_id="web.address_layout">
-    <xpath expr="." position="replace">
-      <div class="row">
-        <div class="col-6 offset-6 text-end">
-          <ul class="list-unstyled">
-            <t t-if="o and o.financing_agency_id">
-              <li><strong><span t-field="o.financing_agency_id.name"/></strong></li>
-              <li><span t-field="o.financing_agency_id.address"/></li>
-            </t>
-            <t t-else="">
-              <t t-if="o and o.partner_id">
-                  <li><strong><span t-field="o.partner_id.name"/></strong></li>
-                  <li><span t-field="o.partner_id.contact_address"/></li>
-              </t>
-            </t>
-          </ul>
-        </div>
-      </div>
-    </xpath>
-  </template>
+        </xpath>
+    </template>
 </odoo>
