@@ -35,21 +35,21 @@
                         </td>
 
                         <td class="text-end">
-                            <span t-esc="'%.0f' % line.sudo().quantity"/>
+                            <span t-esc="int(line.quantity or 0)"/>
                             <span t-field="line.product_uom_id"/>
                         </td>
 
                         <td class="text-end text-nowrap">
-                            <span t-esc="'%.0f' % line.sudo().price_unit"/>
+                            <span t-esc="int(line.sudo().price_unit or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
 
                         <td class="text-end">
-                            <span t-esc="'%.0f' % line.sudo().discount"/> %
+                            <span t-esc="int(line.discount or 0)"/> %
                         </td>
 
                         <td class="text-end text-nowrap">
-                            <span t-esc="'%.0f' % line.sudo().price_total"/>
+                            <span t-esc="int(line.price_total or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
                     </tr>
@@ -81,21 +81,21 @@
             <tr>
                 <td><strong>Total</strong></td>
                 <td class="text-end">
-                    <span t-esc="'%.0f' % o.amount_untaxed"/>
+                    <span t-esc="int(o.amount_untaxed or 0)"/>
                     <span t-esc="o.currency_id.symbol"/>
                 </td>
             </tr>
             <tr>
                 <td>TVA (20%) :</td>
                 <td class="text-end">
-                    <span t-esc="'%.0f' % o.amount_vat_20"/>
+                    <span t-esc="int(o.amount_vat_20 or 0)"/>
                     <span t-esc="o.currency_id.symbol"/>
                 </td>
             </tr>
             <tr class="border-black o_total">
                 <td><strong>Total TTC :</strong></td>
                 <td class="text-end">
-                    <strong t-esc="'%.0f' % o.amount_total_incl_vat_20"/>
+                    <strong t-esc="int(o.amount_total_incl_vat_20 or 0)"/>
                     <strong t-esc="o.currency_id.symbol"/>
                 </td>
             </tr>
@@ -105,7 +105,8 @@
     <xpath expr="//div[@name='due_date']" position="replace"/>
     <xpath expr="//div[@name='origin']" position="replace"/>
     <xpath expr="//p[@name='payment_communication']" position="replace"/>
-    <xpath expr="//strong[contains(text(), 'Invoice Date')]" position="replace">
+    
+    <xpath expr="//div[@name='invoice_date']/strong" position="replace">
       <strong>Date:</strong>
     </xpath>
 
