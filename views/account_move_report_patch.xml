@@ -13,25 +13,21 @@
             </h2>
         </xpath>
 
-        <!-- Traducir headers de la tabla -->
-        <xpath expr="//th[@name='th_description']/span" position="replace">
-            <span>Produit</span>
-        </xpath>
-        
-        <xpath expr="//th[@name='th_quantity']/span" position="replace">
-            <span>Quantité</span>
-        </xpath>
-        
-        <xpath expr="//th[@name='th_priceunit']/span" position="replace">
-            <span>Prix</span>
-        </xpath>
-        
-        <xpath expr="//th[@name='th_discount']/span" position="replace">
-            <span>Disc.%</span>
-        </xpath>
-        
-        <xpath expr="//th[@name='th_subtotal']/span[@groups='account.group_show_line_subtotals_tax_excluded']" position="replace">
-            <span groups="account.group_show_line_subtotals_tax_excluded">Montant</span>
+        <!-- Traducir solo los headers que existen -->
+        <xpath expr="//table[@name='invoice_line_table']//thead" position="replace">
+            <thead>
+                <tr>
+                    <th name="th_description" class="text-start"><span>Produit</span></th>
+                    <th name="th_quantity" class="text-end"><span>Quantité</span></th>
+                    <th name="th_priceunit" class="text-end"><span>Prix</span></th>
+                    <th name="th_discount" class="text-end" groups="product.group_discount_per_so_line"><span>Disc.%</span></th>
+                    <th name="th_tax" t-if="display_discount" class="text-end" groups="account.group_show_line_subtotals_tax_excluded"><span>Taxes</span></th>
+                    <th name="th_subtotal" class="text-end">
+                        <span groups="account.group_show_line_subtotals_tax_excluded">Montant</span>
+                        <span groups="account.group_show_line_subtotals_tax_included">Total</span>
+                    </th>
+                </tr>
+            </thead>
         </xpath>
 
     </template>
