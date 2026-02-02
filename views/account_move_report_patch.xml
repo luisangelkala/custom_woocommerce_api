@@ -106,8 +106,11 @@
     <xpath expr="//div[@name='origin']" position="replace"/>
     <xpath expr="//p[@name='payment_communication']" position="replace"/>
     
-    <xpath expr="//div[@name='invoice_date']/strong" position="replace">
-      <strong>Date:</strong>
+    <xpath expr="//div[@name='invoice_date']" position="replace">
+        <div class="col-auto col-3 mw-100 mb-2" name="invoice_date">
+            <strong>Date:</strong>
+            <p class="m-0" t-field="o.invoice_date"/>
+        </div>
     </xpath>
 
     <xpath expr="//h2" position="replace">
