@@ -99,12 +99,18 @@
                     <div>
                         <h6 t-field="invoice.financing_agency_id.name"/>
                          <div t-field="invoice.financing_agency_id.address"/>
+                         <div t-if="invoice.financing_agency_id.phone">Tél: <span t-field="invoice.financing_agency_id.phone"/></div>
+                         <div t-if="invoice.financing_agency_id.email">Email: <span t-field="invoice.financing_agency_id.email"/></div>
+                         <div t-if="invoice.financing_agency_id.siren">Siren: <span t-field="invoice.financing_agency_id.siren"/></div>
                     </div>
                 </t>
                 <t t-else="">
                     <div>
                         <h6 t-field="invoice.partner_id.name"/>
                         <div t-field="invoice.partner_id.contact_address"/>
+                        <div t-if="invoice.partner_id.phone">Tél: <span t-field="invoice.partner_id.phone"/></div>
+                        <div t-if="invoice.partner_id.email">Email: <span t-field="invoice.partner_id.email"/></div>
+                        <div t-if="invoice.partner_id.siren">Siren: <span t-field="invoice.partner_id.siren"/></div>
                     </div>
                 </t>
             </div>
