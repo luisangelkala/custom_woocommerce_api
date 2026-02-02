@@ -34,21 +34,21 @@
                                     <td class="text-start"><span t-field="line.product_id.name"/></td>
 
                                     <td class="text-end">
-                                        <span t-esc="int(line.quantity or 0)"/>
+                                        <span t-esc="'%.0f' % line.sudo().quantity"/>
                                         <span t-field="line.product_uom_id"/>
                                     </td>
 
                                     <td class="text-end">
-                                        <span t-esc="int(line.sudo().price_unit or 0)"/>
+                                        <span t-esc="'%.0f' % line.sudo().price_unit"/>
                                         <span t-esc="invoice.currency_id.symbol"/>
                                     </td>
 
                                     <td class="text-end">
-                                        <span t-esc="int(line.discount or 0)"/> %
+                                        <span t-esc="'%.0f' % line.sudo().discount"/> %
                                     </td>
 
                                     <td class="text-end">
-                                        <span t-esc="int(line.price_total or 0)"/>
+                                        <span t-esc="'%.0f' % line.sudo().price_total"/>
                                         <span t-esc="invoice.currency_id.symbol"/>
                                     </td>
                                 </tr>
@@ -69,21 +69,21 @@
                             <tr class="border-black custom-total">
                                 <td><strong>Total :</strong></td>
                                 <td class="text-end">
-                                    <span t-esc="int(invoice.amount_untaxed or 0)"/>
+                                    <span t-esc="'%.0f' % invoice.amount_untaxed"/>
                                     <span t-esc="invoice.currency_id.symbol"/>
                                 </td>
                             </tr>
                             <tr class="border-black custom-total">
                                 <td><strong>TVA (20%) :</strong></td>
                                 <td class="text-end">
-                                    <span t-esc="int(invoice.amount_vat_20 or 0)"/>
+                                    <span t-esc="'%.0f' % invoice.amount_vat_20"/>
                                     <span t-esc="invoice.currency_id.symbol"/>
                                 </td>
                             </tr>
                             <tr class="border-black custom-total">
                                 <td><strong>Total TTC :</strong></td>
                                 <td class="text-end">
-                                    <strong t-esc="int(invoice.amount_total_incl_vat_20 or 0)"/>
+                                    <strong t-esc="'%.0f' % invoice.amount_total_incl_vat_20"/>
                                     <strong t-esc="invoice.currency_id.symbol"/>
                                 </td>
                             </tr>

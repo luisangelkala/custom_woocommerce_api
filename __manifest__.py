@@ -14,13 +14,13 @@
         'views/crm_quick_create_patch.xml',
         'views/create_lead_oportunity.xml',
         'views/report_saleorder_custom.xml',
-        'views/portal_saleorder_custom.xml'
-        #'views/account_move_report_patch.xml',
+        'views/portal_saleorder_custom.xml',
+        'views/account_move_report_patch.xml',
         'views/financing_agency_form_patch.xml',
         'views/account_move_form_patch.xml',
         'views/res_partner_views.xml',
-        'views/product_views.xml'
-        #'views/portal_invoice_custom.xml'
+        'views/product_views.xml',
+        'views/portal_invoice_custom.xml'
     ],
     'controllers': [
         'controllers/main.py',
