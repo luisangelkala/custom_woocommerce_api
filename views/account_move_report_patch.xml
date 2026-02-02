@@ -28,7 +28,7 @@
         <tbody class="invoice_tbody">
             <t t-set="current_subtotal" t-value="0"/>
             <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
-                <t t-if="line.display_type == 'product'">
+                <t t-if="not line.display_type" name="account_invoice_line_accountable">
                     <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
                         
                         <td name="account_invoice_line_name">
@@ -137,4 +137,37 @@
           <li>7 passage turquetil, 75011 Paris</li>
           <li>Téléphone : 01 48 96 24 45</li>
           <li>Email : commercial@leasymat.fr</li>
-          <li>Siren :
+          <li>Siren : 983 918 996</li>
+        </ul>
+    </xpath>
+  </template>
+
+
+  <template id="custom_replace_address_layout" inherit_id="web.address_layout">
+    <xpath expr="." position="replace">
+      <div class="row">
+        <div class="col-6 offset-6 text-end">
+          <ul class="list-unstyled">
+            <t t-if="o and o.financing_agency_id">
+              <li><strong><span t-field="o.financing_agency_id.name"/></strong></li>
+              <li><span t-field="o.financing_agency_id.address"/></li>
+              <li t-if="o.financing_agency_id.phone">Tél : <span t-field="o.financing_agency_id.phone"/></li>
+              <li t-if="o.financing_agency_id.email">Email : <span t-field="o.financing_agency_id.email"/></li>
+              <li t-if="o.financing_agency_id.siren">Siren : <span t-field="o.financing_agency_id.siren"/></li>
+            </t>
+            <t t-else="">
+              <t t-if="o and o.partner_id">
+                  <li><strong><span t-field="o.partner_id.name"/></strong></li>
+                  <li><span t-field="o.partner_id.contact_address"/></li>
+                  <li t-if="o.partner_id.phone">Tél : <span t-field="o.partner_id.phone"/></li>
+                  <li t-if="o.partner_id.email">Email : <span t-field="o.partner_id.email"/></li>
+                  <li t-if="o.partner_id.siren">Siren : <span t-field="o.partner_id.siren"/></li>
+              </t>
+            </t>
+          </ul>
+        </div>
+      </div>
+    </xpath>
+  </template>
+
+</odoo>
