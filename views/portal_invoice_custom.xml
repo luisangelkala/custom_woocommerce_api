@@ -28,25 +28,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="invoice.invoice_line_ids" t-as="line">
+                        <t t-foreach="invoice.invoice_line_ids.sudo()" t-as="line">
                             <t t-if="not line.display_type"> 
                                 <tr>
                                     <td class="text-start"><span t-field="line.product_id.name"/></td>
-
                                     <td class="text-end">
                                         <span t-esc="int(line.quantity or 0)"/>
                                         <span t-field="line.product_uom_id"/>
                                     </td>
-
                                     <td class="text-end">
-                                        <span t-esc="int(line.sudo().price_unit or 0)"/>
+                                        <span t-esc="int(line.price_unit or 0)"/>
                                         <span t-esc="invoice.currency_id.symbol"/>
                                     </td>
-
                                     <td class="text-end">
                                         <span t-esc="int(line.discount or 0)"/> %
                                     </td>
-
                                     <td class="text-end">
                                         <span t-esc="int(line.price_total or 0)"/>
                                         <span t-esc="invoice.currency_id.symbol"/>

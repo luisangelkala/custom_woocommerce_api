@@ -27,33 +27,28 @@
 
     <xpath expr="//table[@name='invoice_line_table']//tbody" position="replace">
         <tbody class="invoice_tbody">
-            <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
+            <t t-foreach="o.invoice_line_ids.sudo().sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
                 <t t-if="not line.display_type">
                     <tr>
                         <td name="account_invoice_line_name">
                             <span t-field="line.product_id.name"/>
                         </td>
-
                         <td class="text-end">
                             <span t-esc="int(line.quantity or 0)"/>
                             <span t-field="line.product_uom_id"/>
                         </td>
-
                         <td class="text-end text-nowrap">
-                            <span t-esc="int(line.sudo().price_unit or 0)"/>
+                            <span t-esc="int(line.price_unit or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
-
                         <td class="text-end">
                             <span t-esc="int(line.discount or 0)"/> %
                         </td>
-
                         <td class="text-end text-nowrap">
                             <span t-esc="int(line.price_total or 0)"/>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
                     </tr>
-                    
                     <tr>
                          <td colspan="5" class="text-start small border-0 pt-0 text-muted">
                             <t t-if="line.include_full_service_warranty">Inclut la garantie complète</t>
@@ -105,7 +100,6 @@
     <xpath expr="//div[@name='due_date']" position="replace"/>
     <xpath expr="//div[@name='origin']" position="replace"/>
     <xpath expr="//p[@name='payment_communication']" position="replace"/>
-    
     <xpath expr="//div[@name='invoice_date']" position="replace">
         <div class="col-auto col-3 mw-100 mb-2" name="invoice_date">
             <strong>Date:</strong>
@@ -120,9 +114,7 @@
         <span t-field="o.custom_display_number"/>
       </h2>
     </xpath>
-
   </template>
-
 
   <template id="hide_footer_email" inherit_id="web.external_layout_standard">
     <xpath expr="//ul[contains(@class, 'list-inline')]" position="replace"/>
@@ -154,5 +146,4 @@
       </div>
     </xpath>
   </template>
-
 </odoo>
