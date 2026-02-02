@@ -62,20 +62,17 @@
                                 <th name="th_priceunit" class="text-end"><span>Prix</span></th>
                                 <th name="th_discount" class="text-end"><span>Disc.%</span></th>
                                 <th name="th_subtotal" class="text-end"><span>Montant</span></th>
-                                <th name="th_warranty" class="text-end"><span>%</span></th>
                             </tr>
                         </thead>
                         <tbody class="invoice_tbody">
-                            <!-- Iterar sobre las líneas de factura -->
                             <t t-set="current_subtotal" t-value="0"/>
-                            <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.name, -l.id), reverse=True)"/>
 
-                            <t t-foreach="lines" t-as="line">
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
                                 <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                 <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
                                 <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
-                                    <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
+                                    <t t-if="not line.display_type" name="account_invoice_line_accountable">
                                         <td name="account_invoice_line_name"><span t-field="line.name" t-options="{'widget': 'text'}"/></td>
                                         <td class="text-end">
                                             <span t-field="line.quantity"/>
@@ -90,9 +87,6 @@
                                         <td class="text-end o_price_total">
                                             <span class="text-nowrap" t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                             <span class="text-nowrap" t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
-                                        </td>
-                                        <td class="text-end">
-                                            <span t-if="line.warranty_percentage" t-field="line.warranty_percentage"/>
                                         </td>
                                     </t>
                                     <t t-elif="line.display_type == 'line_section'">
@@ -117,23 +111,10 @@
                         <div id="total" class="row">
                             <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
                                 <table class="table table-sm table-borderless" style="page-break-inside: avoid;">
-                                    <!-- Subtotal -->
                                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                                     <t t-call="account.document_tax_totals"/>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Garantías -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <p t-if="o.has_full_warranty">
-                                <strong>✓ Inclut la garantie complète</strong>
-                            </p>
-                            <p t-if="o.has_standard_warranty">
-                                <strong>✓ Inclut la garantie standard</strong>
-                            </p>
                         </div>
                     </div>
 
