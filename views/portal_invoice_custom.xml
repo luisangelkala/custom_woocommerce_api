@@ -97,18 +97,44 @@
 
         <xpath expr="//div[hasclass('o_portal_contact_details')]" position="replace">
             <div class="o_portal_contact_details d-flex flex-column gap-2">
+                
                 <t t-if="invoice.financing_agency_id">
                     <div>
-                        <h6 t-field="invoice.financing_agency_id.name"/>
-                        <div t-field="invoice.financing_agency_id" t-options='{"widget": "contact", "fields": ["address", "phone", "email"], "no_marker": False}'/>
-                        <div t-if="invoice.financing_agency_id.siren">Siren: <span t-field="invoice.financing_agency_id.siren"/></div>
+                        <h6 class="mb-1" t-field="invoice.financing_agency_id.name"/>
+                        <div t-field="invoice.financing_agency_id.contact_address" class="mb-2"/>
+                        
+                        <div t-if="invoice.financing_agency_id.phone">
+                            <i class="fa fa-phone me-1 text-muted"/> 
+                            <span t-field="invoice.financing_agency_id.phone"/>
+                        </div>
+                        <div t-if="invoice.financing_agency_id.email">
+                            <i class="fa fa-envelope me-1 text-muted"/> 
+                            <span t-field="invoice.financing_agency_id.email"/>
+                        </div>
+                        <div t-if="invoice.financing_agency_id.siren">
+                            <i class="fa fa-id-card me-1 text-muted"/> 
+                            Siren : <span t-field="invoice.financing_agency_id.siren"/>
+                        </div>
                     </div>
                 </t>
+
                 <t t-else="">
                     <div>
-                        <h6 t-field="invoice.partner_id.name"/>
-                        <div t-field="invoice.partner_id" t-options='{"widget": "contact", "fields": ["address", "phone", "email"], "no_marker": False}'/>
-                        <div t-if="invoice.partner_id.siren">Siren: <span t-field="invoice.partner_id.siren"/></div>
+                        <h6 class="mb-1" t-field="invoice.partner_id.name"/>
+                        <div t-field="invoice.partner_id.contact_address" class="mb-2"/>
+                        
+                        <div t-if="invoice.partner_id.phone">
+                            <i class="fa fa-phone me-1 text-muted"/> 
+                            <span t-field="invoice.partner_id.phone"/>
+                        </div>
+                        <div t-if="invoice.partner_id.email">
+                            <i class="fa fa-envelope me-1 text-muted"/> 
+                            <span t-field="invoice.partner_id.email"/>
+                        </div>
+                        <div t-if="invoice.partner_id.siren">
+                            <i class="fa fa-id-card me-1 text-muted"/> 
+                            Siren : <span t-field="invoice.partner_id.siren"/>
+                        </div>
                     </div>
                 </t>
             </div>

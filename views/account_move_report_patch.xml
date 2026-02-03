@@ -113,4 +113,46 @@
         </xpath>
 
     </template>
+
+    <template id="custom_replace_address_layout" inherit_id="web.address_layout">
+        <xpath expr="." position="replace">
+            <div class="row">
+                <div class="col-6 offset-6 text-end">
+                    <ul class="list-unstyled">
+                        <t t-if="o and o.financing_agency_id">
+                            <li><strong><span t-field="o.financing_agency_id.name"/></strong></li>
+                            <li><span t-field="o.financing_agency_id.contact_address"/></li>
+                        
+                            <li t-if="o.financing_agency_id.phone" class="mt-1">
+                                Tél : <span t-field="o.financing_agency_id.phone"/>
+                            </li>
+                            <li t-if="o.financing_agency_id.email">
+                                Email : <span t-field="o.financing_agency_id.email"/>
+                            </li>
+                            <li t-if="o.financing_agency_id.siren">
+                                Siren : <span t-field="o.financing_agency_id.siren"/>
+                            </li>
+                        </t>
+
+                        <t t-else="">
+                            <t t-if="o and o.partner_id">
+                                <li><strong><span t-field="o.partner_id.name"/></strong></li>
+                                <li><span t-field="o.partner_id.contact_address"/></li>
+                                
+                                <li t-if="o.partner_id.phone" class="mt-1">
+                                    Tél : <span t-field="o.partner_id.phone"/>
+                                </li>
+                                <li t-if="o.partner_id.email">
+                                    Email : <span t-field="o.partner_id.email"/>
+                                </li>
+                                <li t-if="o.partner_id.siren">
+                                    Siren : <span t-field="o.partner_id.siren"/>
+                                </li>
+                            </t>
+                        </t>
+                    </ul>
+                </div>
+            </div>
+        </xpath>
+    </template>
 </odoo>
