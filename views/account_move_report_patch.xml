@@ -41,7 +41,7 @@
                 <t t-set="lines" t-value="o.invoice_line_ids.sudo()"/>
                 
                 <t t-foreach="lines" t-as="line">
-                    <t t-if="not line.display_type">
+                    <t t-if="not line.display_type or line.display_type == 'product'">
                         <tr>
                             <td name="account_invoice_line_name">
                                 <span t-field="line.name"/>

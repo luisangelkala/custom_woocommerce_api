@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                         <t t-foreach="lines" t-as="line">
-                            <t t-if="not line.display_type"> 
+                            <t t-if="not line.display_type or line.display_type == 'product'"> 
                                 <tr>
                                     <td class="text-start">
                                         <span t-field="line.name"/>
