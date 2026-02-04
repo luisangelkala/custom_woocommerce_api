@@ -88,6 +88,13 @@
             </tbody>
         </xpath>
 
+        <xpath expr="//div[@name='invoice_date']" position="replace">
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.invoice_date" name="invoice_date">
+                <strong>Date :</strong>
+                <p class="m-0" t-field="o.invoice_date"/>
+            </div>
+        </xpath>
+
         <xpath expr="//div[@name='origin']/strong" position="replace">
             <strong>Numéro :</strong>
         </xpath>
