@@ -184,10 +184,7 @@
                 </ul>
             </div>
         </xpath>
-        <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
-        <xpath expr="//div[last()]" position="replace">
-            <div style="display: none !important;"></div>
-        </xpath>
+        <!-- El parche del footer se mueve a una solución global de assets -->
     </template>
 
     <!-- Parche para el Header tipo 'Standard' (Limpio/Clean) - Muy común por defecto -->
@@ -203,23 +200,25 @@
                 </ul>
             </div>
         </xpath>
-        <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
-        <xpath expr="//div[last()]" position="replace">
-            <div style="display: none !important;"></div>
-        </xpath>
+        <!-- El parche del footer se mueve a una solución global de assets -->
     </template>
 
     <!-- Parche para el Footer tipo 'Striped' (Bandas) -->
     <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
-        <xpath expr="//div[last()]" position="replace">
-            <div style="display: none !important;"></div>
-        </xpath>
+        <!-- Se elimina el parche del footer para centralizarlo en assets -->
     </template>
 
     <!-- Parche para el Footer tipo 'Bold' (Negrita) -->
     <template id="custom_external_layout_bold_patch" inherit_id="web.external_layout_bold">
-        <xpath expr="//div[last()]" position="replace">
-            <div style="display: none !important;"></div>
+        <!-- Se elimina el parche del footer para centralizarlo en assets -->
+    </template>
+
+    <!-- SOLUCIÓN DEFINITIVA: Inyectar CSS en los assets comunes de reportes -->
+    <!-- Esto asegura que el estilo se cargue en el HEAD del HTML para todos los layouts, -->
+    <!-- solucionando el error 'External ID not found' al añadir 'web' a las dependencias. -->
+    <template id="custom_report_assets_common_patch" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <style type="text/css">.footer, .o_footer { display: none !important; }</style>
         </xpath>
     </template>
 

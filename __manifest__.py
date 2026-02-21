@@ -5,7 +5,7 @@
     'category': 'Custom',
     'author': 'Tu Nombre',
     'description': 'Módulo para integrar WooCommerce con Odoo a través de una API personalizada.',
-    'depends': ['base', 'sale', 'crm', 'contacts', 'account', 'portal'],  # AÑADIDO 'account' y 'portal'
+    'depends': ['base', 'web', 'sale', 'crm', 'contacts', 'account', 'portal'],  # AÑADIDO 'web', 'account' y 'portal'
     'data': [
         'security/ir.model.access.csv',
         'views/sale_order_views.xml',
