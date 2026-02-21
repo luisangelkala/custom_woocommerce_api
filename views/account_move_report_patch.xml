@@ -177,6 +177,8 @@
     <template id="custom_external_layout_boxed_patch" inherit_id="web.external_layout_boxed">
         <xpath expr="//div[@name='company_address']" position="replace">
             <div class="mb4">
+                <!-- CSS inyectado aquí para asegurar que afecte al layout global y oculte el footer -->
+                <style>.footer { display: none !important; }</style>
                 <ul class="list-unstyled">
                     <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
                     <li>7 pasagge turquetil, 75011 Paris</li>
@@ -192,6 +194,8 @@
     <template id="custom_external_layout_standard_patch" inherit_id="web.external_layout_standard">
         <xpath expr="//div[@name='company_address']" position="replace">
             <div class="mb4">
+                <!-- CSS inyectado aquí para asegurar que afecte al layout global y oculte el footer -->
+                <style>.footer { display: none !important; }</style>
                 <ul class="list-unstyled">
                     <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
                     <li>7 pasagge turquetil, 75011 Paris</li>
