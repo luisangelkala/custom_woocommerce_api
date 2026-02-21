@@ -213,4 +213,12 @@
         <!-- Se elimina el parche del footer para centralizarlo en assets -->
     </template>
 
+    <!-- SOLUCIÓN DE RESPALDO: Inyectar CSS directamente en el layout raíz de reportes -->
+    <!-- Usamos web.report_layout que contiene el HEAD html. Esto es infalible si los assets fallan. -->
+    <template id="custom_report_layout_patch" inherit_id="web.report_layout">
+        <xpath expr="//head" position="inside">
+            <style type="text/css">.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
+        </xpath>
+    </template>
+
 </odoo>
