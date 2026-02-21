@@ -217,7 +217,15 @@
     <!-- Usamos web.report_layout que contiene el HEAD html. Esto es infalible si los assets fallan. -->
     <template id="custom_report_layout_patch" inherit_id="web.report_layout">
         <xpath expr="//head" position="inside">
-            <style type="text/css">.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
+            <style type="text/css">.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer, .o_background_footer { display: none !important; }</style>
+        </xpath>
+    </template>
+
+    <!-- SOLUCIÓN DEFINITIVA PARA WKHTMLTOPDF: Inyectar CSS en minimal_layout -->
+    <!-- minimal_layout se usa para renderizar header/footer aislados en el motor PDF -->
+    <template id="custom_minimal_layout_patch" inherit_id="web.minimal_layout">
+        <xpath expr="//head" position="inside">
+            <style type="text/css">.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer, .o_background_footer { display: none !important; }</style>
         </xpath>
     </template>
 

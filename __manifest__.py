@@ -32,9 +32,6 @@
             'custom_woocommerce_api/static/src/js/crm_quick_create_redirect.js',
             'custom_woocommerce_api/static/src/css/custom_styles.css',
         ],
-        'web.report_assets_common': [
-            'custom_woocommerce_api/static/src/css/report_footer.css',
-        ],
     },
     'installable': True,
     'application': False,
