@@ -188,7 +188,8 @@
 
     <!-- Parche para el Header tipo 'Striped' (Bandas) - Por si acaso usan este -->
     <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
-        <xpath expr="//div[@name='company_address']" position="replace">
+        <!-- CORRECCIÓN: Usamos has-class porque el atributo name='company_address' a veces no existe en Striped -->
+        <xpath expr="//div[has-class('text-end')]/div[has-class('mb4')]" position="replace">
             <div class="mb4">
                 <ul class="list-unstyled">
                     <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
