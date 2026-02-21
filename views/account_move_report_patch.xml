@@ -185,10 +185,8 @@
             </div>
         </xpath>
         <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
-        <xpath expr="//div[last()]" position="inside">
-            <style>
-                .text-center, .list-inline, .text-muted { display: none !important; }
-            </style>
+        <xpath expr="//div[last()]" position="replace">
+            <div style="display: none !important;"></div>
         </xpath>
     </template>
 
@@ -206,28 +204,22 @@
             </div>
         </xpath>
         <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
-        <xpath expr="//div[last()]" position="inside">
-            <style>
-                .text-center, .list-inline, .text-muted { display: none !important; }
-            </style>
+        <xpath expr="//div[last()]" position="replace">
+            <div style="display: none !important;"></div>
         </xpath>
     </template>
 
     <!-- Parche para el Footer tipo 'Striped' (Bandas) -->
     <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
-        <xpath expr="//div[last()]" position="inside">
-            <style>
-                .text-center, .list-inline, .text-muted { display: none !important; }
-            </style>
+        <xpath expr="//div[last()]" position="replace">
+            <div style="display: none !important;"></div>
         </xpath>
     </template>
 
     <!-- Parche para el Footer tipo 'Bold' (Negrita) -->
     <template id="custom_external_layout_bold_patch" inherit_id="web.external_layout_bold">
-        <xpath expr="//div[last()]" position="inside">
-            <style>
-                .text-center, .list-inline, .text-muted { display: none !important; }
-            </style>
+        <xpath expr="//div[last()]" position="replace">
+            <div style="display: none !important;"></div>
         </xpath>
     </template>
 
