@@ -184,6 +184,12 @@
                 </ul>
             </div>
         </xpath>
+        <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
+        <xpath expr="//div[last()]" position="inside">
+            <style>
+                .text-center, .list-inline, .text-muted { display: none !important; }
+            </style>
+        </xpath>
     </template>
 
     <!-- Parche para el Header tipo 'Standard' (Limpio/Clean) - Muy común por defecto -->
@@ -199,14 +205,28 @@
                 </ul>
             </div>
         </xpath>
+        <!-- Ocultar contenido del footer (Email incorrecto y paginación) inyectando CSS en el último div (Footer) -->
+        <xpath expr="//div[last()]" position="inside">
+            <style>
+                .text-center, .list-inline, .text-muted { display: none !important; }
+            </style>
+        </xpath>
     </template>
 
-    <!-- SOLUCIÓN DEFINITIVA ALTERNATIVA: Inyectar CSS en el layout raíz de reportes -->
-    <!-- Usamos web.report_layout que contiene el HEAD html, evitando el error de assets_common -->
-    <template id="custom_report_layout_patch" inherit_id="web.report_layout">
-        <xpath expr="//head" position="inside">
+    <!-- Parche para el Footer tipo 'Striped' (Bandas) -->
+    <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
+        <xpath expr="//div[last()]" position="inside">
             <style>
-                .footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }
+                .text-center, .list-inline, .text-muted { display: none !important; }
+            </style>
+        </xpath>
+    </template>
+
+    <!-- Parche para el Footer tipo 'Bold' (Negrita) -->
+    <template id="custom_external_layout_bold_patch" inherit_id="web.external_layout_bold">
+        <xpath expr="//div[last()]" position="inside">
+            <style>
+                .text-center, .list-inline, .text-muted { display: none !important; }
             </style>
         </xpath>
     </template>
