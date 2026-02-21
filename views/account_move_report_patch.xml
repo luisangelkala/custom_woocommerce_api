@@ -186,19 +186,4 @@
         </xpath>
     </template>
 
-    <!-- Parche para el Header tipo 'Striped' (Bandas) - Por si acaso usan este -->
-    <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
-        <!-- CORRECCIÓN: Usamos has-class porque el atributo name='company_address' a veces no existe en Striped -->
-        <xpath expr="//div[contains(@class, 'text-end')]/div[contains(@class, 'mb4')]" position="replace">
-            <div class="mb4">
-                <ul class="list-unstyled">
-                    <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
-                    <li>7 pasagge turquetil, 75011 Paris</li>
-                    <li>Téléphone: 01 48 96 24 45</li>
-                    <li>Email: commercial@leasymat.fr</li>
-                    <li>Siren: 983 918 996</li>
-                </ul>
-            </div>
-        </xpath>
-    </template>
 </odoo>
