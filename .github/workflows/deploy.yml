@@ -14,6 +14,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 18765
           script: |
             # Ajusta esta ruta a donde tienes tu docker-compose.yml en la VPS
             cd /opt/ionos-leasymat/odoo-addons/custom_woocommerce_api/ 
