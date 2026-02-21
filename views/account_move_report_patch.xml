@@ -6,8 +6,6 @@
             <style>
                 div[name='operation_type'] { display: none !important; }
                 .text-nowrap { white-space: nowrap; }
-                /* Ocultar el pie de página (Email incorrecto y paginación) vía CSS para evitar errores XML */
-                .footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }
             </style>
         </xpath>
 
@@ -177,8 +175,6 @@
     <template id="custom_external_layout_boxed_patch" inherit_id="web.external_layout_boxed">
         <xpath expr="//div[@name='company_address']" position="replace">
             <div class="mb4">
-                <!-- CSS inyectado aquí para asegurar que afecte al layout global y oculte el footer -->
-                <style>.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
                 <ul class="list-unstyled">
                     <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
                     <li>7 pasagge turquetil, 75011 Paris</li>
@@ -194,8 +190,6 @@
     <template id="custom_external_layout_standard_patch" inherit_id="web.external_layout_standard">
         <xpath expr="//div[@name='company_address']" position="replace">
             <div class="mb4">
-                <!-- CSS inyectado aquí para asegurar que afecte al layout global y oculte el footer -->
-                <style>.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
                 <ul class="list-unstyled">
                     <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
                     <li>7 pasagge turquetil, 75011 Paris</li>
@@ -207,19 +201,13 @@
         </xpath>
     </template>
 
-    <!-- Parche para el Header tipo 'Striped' (Bandas) - Solo inyección CSS segura -->
-    <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
-        <!-- Usamos //div[1] para inyectar el estilo al principio, evitando errores de 'element not found' -->
-        <xpath expr="//div[1]" position="before">
-            <style>.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
-        </xpath>
-    </template>
-
-    <!-- Parche para el Header tipo 'Bold' (Negrita) - Solo inyección CSS segura -->
-    <template id="custom_external_layout_bold_patch" inherit_id="web.external_layout_bold">
-        <!-- Usamos //div[1] para inyectar el estilo al principio, evitando errores de 'element not found' -->
-        <xpath expr="//div[1]" position="before">
-            <style>.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }</style>
+    <!-- SOLUCIÓN DEFINITIVA: Inyectar CSS en los assets comunes de reportes -->
+    <!-- Esto asegura que el estilo se cargue en el HEAD del HTML generado para Header/Footer/Body -->
+    <template id="custom_report_assets_common_patch" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <style>
+                .footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer { display: none !important; }
+            </style>
         </xpath>
     </template>
 
