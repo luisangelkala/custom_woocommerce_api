@@ -129,7 +129,16 @@
     <template id="custom_replace_address_layout" inherit_id="web.address_layout">
         <xpath expr="." position="replace">
             <div class="row">
-                <div class="col-6 offset-6 text-end">
+                <div class="col-6">
+                    <ul class="list-unstyled" t-if="o and o.company_id">
+                        <li><strong><span t-field="o.company_id.name"/></strong></li>
+                        <li><span t-field="o.company_id.partner_id.contact_address"/></li>
+                        <li t-if="o.company_id.phone">Tél : <span t-field="o.company_id.phone"/></li>
+                        <li t-if="o.company_id.email">Email : <span t-field="o.company_id.email"/></li>
+                        <li t-if="o.company_id.partner_id.siren">Siren : <span t-field="o.company_id.partner_id.siren"/></li>
+                    </ul>
+                </div>
+                <div class="col-6 text-end">
                     <ul class="list-unstyled">
                         <t t-if="o and o.financing_agency_id">
                             <li><strong><span t-field="o.financing_agency_id.name"/></strong></li>
