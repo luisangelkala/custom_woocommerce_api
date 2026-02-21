@@ -21,7 +21,6 @@ jobs:
             
             git pull
             
-            # Reinicia y actualiza el módulo específico
+            # Reinicia docker compose y actualiza el módulo específico
             docker-compose restart odoo17
-            # CI/CD (no hay terminal interactiva)
             docker exec odoo-app odoo -c /etc/odoo/odoo.conf -d leasymat -u custom_woocommerce_api --stop-after-init --http-port=0
