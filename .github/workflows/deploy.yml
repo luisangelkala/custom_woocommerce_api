@@ -1,0 +1,26 @@
+name: Deploy Odoo to VPS
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Ajusta esta ruta a donde tienes tu docker-compose.yml en la VPS
+            cd /opt/ionos-leasymat/odoo-addons/custom_woocommerce_api/ 
+            
+            git pull
+            
+            # Reinicia y actualiza el módulo específico
+            docker-compose restart odoo17
+            # CI/CD (no hay terminal interactiva)
+            docker exec odoo-app odoo -c /etc/odoo/odoo.conf -d leasymat -u custom_woocommerce_api --stop-after-init --http-port=0
