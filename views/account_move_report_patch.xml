@@ -213,13 +213,4 @@
         <!-- Se elimina el parche del footer para centralizarlo en assets -->
     </template>
 
-    <!-- SOLUCIÓN DEFINITIVA: Inyectar CSS en los assets comunes de reportes -->
-    <!-- Esto asegura que el estilo se cargue en el HEAD del HTML para todos los layouts, -->
-    <!-- solucionando el error 'External ID not found' al añadir 'web' a las dependencias. -->
-    <template id="custom_report_assets_common_patch" inherit_id="web.report_assets_common">
-        <xpath expr="." position="inside">
-            <style type="text/css">.footer, .o_footer { display: none !important; }</style>
-        </xpath>
-    </template>
-
 </odoo>

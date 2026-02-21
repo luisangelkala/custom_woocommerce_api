@@ -1,0 +1,3 @@
+.footer, .o_footer, .o_standard_footer, .o_boxed_footer, .o_striped_footer, .o_bold_footer, .o_clean_footer {
+    display: none !important;
+}
