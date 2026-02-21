@@ -6,6 +6,8 @@
             <style>
                 div[name='operation_type'] { display: none !important; }
                 .text-nowrap { white-space: nowrap; }
+                /* Ocultar el pie de página (Email incorrecto y paginación) vía CSS para evitar errores XML */
+                .footer { display: none !important; }
             </style>
         </xpath>
 
@@ -184,11 +186,6 @@
                 </ul>
             </div>
         </xpath>
-        <!-- Eliminar el pie de página (Email incorrecto y paginación) -->
-        <xpath expr="//div[contains(@class, 'footer')]" position="replace">
-            <div class="footer">
-            </div>
-        </xpath>
     </template>
 
     <!-- Parche para el Header tipo 'Standard' (Limpio/Clean) - Muy común por defecto -->
@@ -202,11 +199,6 @@
                     <li>Email: commercial@leasymat.fr</li>
                     <li>Siren: 983 918 996</li>
                 </ul>
-            </div>
-        </xpath>
-        <!-- Eliminar el pie de página (Email incorrecto y paginación) -->
-        <xpath expr="//div[contains(@class, 'footer')]" position="replace">
-            <div class="footer">
             </div>
         </xpath>
     </template>
