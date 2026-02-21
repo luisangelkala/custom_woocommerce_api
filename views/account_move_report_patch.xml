@@ -186,4 +186,46 @@
         </xpath>
     </template>
 
+    <!-- Parche para el Header tipo 'Standard' (Limpio/Clean) - Muy común por defecto -->
+    <template id="custom_external_layout_standard_patch" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[@name='company_address']" position="replace">
+            <div class="mb4">
+                <ul class="list-unstyled">
+                    <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
+                    <li>7 pasagge turquetil, 75011 Paris</li>
+                    <li>Téléphone: 01 48 96 24 45</li>
+                    <li>Email: commercial@leasymat.fr</li>
+                    <li>Siren: 983 918 996</li>
+                </ul>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Parche para el Header tipo 'Striped' (Bandas) - Reintentamos con XPath más seguro -->
+    <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
+        <!-- Buscamos la lista dentro de la columna alineada a la derecha, evitando buscar divs intermedios que fallaron antes -->
+        <xpath expr="//div[contains(@class, 'text-end')]//ul[contains(@class, 'list-unstyled')]" position="replace">
+            <ul class="list-unstyled">
+                <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
+                <li>7 pasagge turquetil, 75011 Paris</li>
+                <li>Téléphone: 01 48 96 24 45</li>
+                <li>Email: commercial@leasymat.fr</li>
+                <li>Siren: 983 918 996</li>
+            </ul>
+        </xpath>
+    </template>
+
+    <!-- Parche para el Header tipo 'Bold' (Negrita) - Por si acaso -->
+    <template id="custom_external_layout_bold_patch" inherit_id="web.external_layout_bold">
+        <xpath expr="//div[contains(@class, 'text-end')]//ul[contains(@class, 'list-unstyled')]" position="replace">
+            <ul class="list-unstyled">
+                <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
+                <li>7 pasagge turquetil, 75011 Paris</li>
+                <li>Téléphone: 01 48 96 24 45</li>
+                <li>Email: commercial@leasymat.fr</li>
+                <li>Siren: 983 918 996</li>
+            </ul>
+        </xpath>
+    </template>
+
 </odoo>
