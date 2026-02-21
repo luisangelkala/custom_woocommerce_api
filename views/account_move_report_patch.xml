@@ -4,7 +4,7 @@
         
         <xpath expr="//t[@t-set='forced_vat']" position="after">
             <style>
-                div[name='operation_type'], div[name='company_address'] { display: none !important; }
+                div[name='operation_type'] { display: none !important; }
                 .text-nowrap { white-space: nowrap; }
             </style>
         </xpath>
@@ -130,13 +130,7 @@
         <xpath expr="." position="replace">
             <div class="row">
                 <div class="col-6">
-                    <ul class="list-unstyled">
-                        <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
-                        <li>7 pasagge turquetil, 75011 Paris</li>
-                        <li>Téléphone: 01 48 96 24 45</li>
-                        <li>Email: commercial@leasymat.fr</li>
-                        <li>Siren: 983 918 996</li>
-                    </ul>
+                    <!-- Dejamos esto vacío para evitar duplicidad con el Header -->
                 </div>
                 <div class="col-6 text-end">
                     <ul class="list-unstyled">
@@ -173,6 +167,36 @@
                         </t>
                     </ul>
                 </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Parche para el Header tipo 'Boxed' (Caja) - Corrige la info superior -->
+    <template id="custom_external_layout_boxed_patch" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[@name='company_address']" position="replace">
+            <div class="mb4">
+                <ul class="list-unstyled">
+                    <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
+                    <li>7 pasagge turquetil, 75011 Paris</li>
+                    <li>Téléphone: 01 48 96 24 45</li>
+                    <li>Email: commercial@leasymat.fr</li>
+                    <li>Siren: 983 918 996</li>
+                </ul>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Parche para el Header tipo 'Striped' (Bandas) - Por si acaso usan este -->
+    <template id="custom_external_layout_striped_patch" inherit_id="web.external_layout_striped">
+        <xpath expr="//div[@name='company_address']" position="replace">
+            <div class="mb4">
+                <ul class="list-unstyled">
+                    <li style="font-size: 1.2em;"><strong>Leasymat</strong></li>
+                    <li>7 pasagge turquetil, 75011 Paris</li>
+                    <li>Téléphone: 01 48 96 24 45</li>
+                    <li>Email: commercial@leasymat.fr</li>
+                    <li>Siren: 983 918 996</li>
+                </ul>
             </div>
         </xpath>
     </template>
