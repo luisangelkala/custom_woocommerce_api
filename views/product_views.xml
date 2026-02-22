@@ -12,7 +12,7 @@
             <xpath expr="//page[@name='sales']" position="inside">
                 <group name="woocommerce_integration" string="WooCommerce Integration">
                     <field name="x_brand_discount" readonly="1"/>
-                    <field name="x_product_url" widget="url" readonly="1"/>
+                    <field name="x_product_url" widget="url" readonly="1" style="color: #007bff; text-decoration: underline;"/>
                 </group>
             </xpath>
         </field>
