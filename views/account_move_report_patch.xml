@@ -46,7 +46,7 @@
                                 <span t-field="line.name"/>
                                 <t t-if="line.product_id.x_product_url">
                                     <br/>
-                                    <a t-att-href="line.product_id.x_product_url" target="_blank" style="color: #875A7B; text-decoration: none; font-size: 0.9em;">
+                                    <a t-att-href="line.product_id.x_product_url" target="_blank" style="color: #007bff; text-decoration: underline; font-size: 0.9em;">
                                         Voir le produit sur le site
                                     </a>
                                 </t>
