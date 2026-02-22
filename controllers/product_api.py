@@ -17,6 +17,7 @@ class ProductAPIController(http.Controller):
             sales_price = data.get('sales_price')
             description = data.get('description')
             discount = data.get('discount') # Nuevo campo
+            product_url = data.get('product_url') # Nuevo campo URL
 
             if sku:
                 product = request.env['product.product'].sudo().search([('default_code', '=', sku)], limit=1)
@@ -30,6 +31,7 @@ class ProductAPIController(http.Controller):
                 'description': description,
                 # Guardamos el descuento en el nuevo campo creado en el paso 1
                 'x_brand_discount': float(discount) if discount else 0.0,
+                'x_product_url': product_url or '',
             })
 
             return {"status": "success", "message": "Product created successfully", "product_id": new_product.id}
@@ -47,6 +49,7 @@ class ProductAPIController(http.Controller):
             sales_price = data.get('sales_price')
             description = data.get('description')
             discount = data.get('discount') # Nuevo campo
+            product_url = data.get('product_url') # Nuevo campo URL
 
             if not sku:
                 return {"status": "error", "message": "Missing required field: sku"}
@@ -66,6 +69,9 @@ class ProductAPIController(http.Controller):
             # Actualizamos el descuento si viene en el JSON
             if discount is not None:
                 update_vals['x_brand_discount'] = float(discount)
+
+            if product_url is not None:
+                update_vals['x_product_url'] = product_url
 
             product.write(update_vals)
 

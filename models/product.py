@@ -7,3 +7,4 @@ class ProductTemplate(models.Model):
     # Campo para guardar el porcentaje de descuento que viene de WP
     # Este es el dato "maestro" que sincroniza el plugin.
     x_brand_discount = fields.Float(string='WP Brand Discount (%)', default=0.0)
+    x_product_url = fields.Char(string='Product URL')
