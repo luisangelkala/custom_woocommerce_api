@@ -64,6 +64,7 @@ class WooCommerceAPIController(http.Controller):
                     'city': main_address.get('city', '') or partner.city,
                     'zip': main_address.get('zip_code', '') or partner.zip,
                     'country_id': country_id or partner.country_id.id,
+                    'siren': customer_data.get('siren', '') or partner.siren,
                 })
 
             # 1) Create the order first (installments set up-front)

@@ -172,4 +172,4 @@ cython_debug/
 
 .vscode/
 .idea/
-PROJECT_CUSTOM_ODOO_COMMERCE.md
+PROJECT_CONTEXT.md
