@@ -14,7 +14,14 @@ class WooCommerceAPIController(http.Controller):
             order_data = (data or {}).get('order', {})
             customer_data = order_data.get('customer', {}) or {}
             products_data = order_data.get('products', []) or []
+            
+            # Datos de dirección: Billing (Principal) y Shipping (Entrega)
+            billing_data = (order_data.get('billing', {}) or {}).get('address', {}) or {}
             shipping_data = (order_data.get('shipping', {}) or {}).get('address', {}) or {}
+            
+            # Usamos Billing como dirección principal. Si falta, fallback a Shipping (por seguridad)
+            main_address = billing_data if billing_data.get('street') else shipping_data
+            
             metadata = order_data.get('metadata', {}) or {}
 
             # installments (quote) - normalize to the string keys used by your PALIER dict
@@ -30,7 +37,7 @@ class WooCommerceAPIController(http.Controller):
 
             # 0) Resolver ID del País (Buscando por Código ISO o Nombre)
             country_id = False
-            country_input = (shipping_data.get('country') or '').strip()
+            country_input = (main_address.get('country') or '').strip()
             if country_input:
                 country = request.env['res.country'].sudo().search([
                     '|', ('code', '=', country_input.upper()), ('name', '=', country_input)
@@ -44,12 +51,20 @@ class WooCommerceAPIController(http.Controller):
                     'name': customer_data.get('name') or 'Customer',
                     'email': customer_data.get('email') or '',
                     'siren': customer_data.get('siren', '') or '',
-                    'street': shipping_data.get('street', '') or '',
-                    'city': shipping_data.get('city', '') or '',
-                    'zip': shipping_data.get('zip_code', '') or '',  # Mapeo zip_code -> zip
+                    'street': main_address.get('street', '') or '',
+                    'city': main_address.get('city', '') or '',
+                    'zip': main_address.get('zip_code', '') or '',  # Mapeo zip_code -> zip
                     'country_id': country_id,
                 }
                 partner = request.env['res.partner'].sudo().create(partner_vals)
+            else:
+                # Si el cliente existe, actualizamos su dirección con la nueva info (si la hay)
+                partner.sudo().write({
+                    'street': main_address.get('street', '') or partner.street,
+                    'city': main_address.get('city', '') or partner.city,
+                    'zip': main_address.get('zip_code', '') or partner.zip,
+                    'country_id': country_id or partner.country_id.id,
+                })
 
             # 1) Create the order first (installments set up-front)
             sale_order_vals = {
