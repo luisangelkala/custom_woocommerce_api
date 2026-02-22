@@ -28,6 +28,15 @@ class WooCommerceAPIController(http.Controller):
             if not customer_data or not products_data:
                 return {"status": "error", "message": "Missing required fields: customer or products"}
 
+            # 0) Resolver ID del País (Buscando por Código ISO o Nombre)
+            country_id = False
+            country_input = (shipping_data.get('country') or '').strip()
+            if country_input:
+                country = request.env['res.country'].sudo().search([
+                    '|', ('code', '=', country_input.upper()), ('name', '=', country_input)
+                ], limit=1)
+                country_id = country.id
+
             # Find or create customer
             partner = request.env['res.partner'].sudo().search([('email', '=', customer_data.get('email'))], limit=1)
             if not partner:
@@ -35,6 +44,10 @@ class WooCommerceAPIController(http.Controller):
                     'name': customer_data.get('name') or 'Customer',
                     'email': customer_data.get('email') or '',
                     'siren': customer_data.get('siren', '') or '',
+                    'street': shipping_data.get('street', '') or '',
+                    'city': shipping_data.get('city', '') or '',
+                    'zip': shipping_data.get('zip_code', '') or '',  # Mapeo zip_code -> zip
+                    'country_id': country_id,
                 }
                 partner = request.env['res.partner'].sudo().create(partner_vals)
 
@@ -82,11 +95,7 @@ class WooCommerceAPIController(http.Controller):
 
             # 3) Shipping partner (optional)
             if any(shipping_data.values()):
-                country_name = (shipping_data.get('country') or '').strip()
-                country_id = False
-                if country_name:
-                    country_id = request.env['res.country'].sudo().search([('name', '=', country_name)], limit=1).id or False
-
+                # Usamos el country_id ya resuelto arriba para evitar errores con códigos ISO
                 shipping_partner = request.env['res.partner'].sudo().create({
                     'name': partner.name,
                     'street': shipping_data.get('street', '') or '',
