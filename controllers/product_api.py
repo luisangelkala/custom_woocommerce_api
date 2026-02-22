@@ -73,7 +73,10 @@ class ProductAPIController(http.Controller):
             if product_url is not None:
                 update_vals['x_product_url'] = product_url
 
-            product.write(update_vals)
+            # Escribimos directamente en la plantilla del producto (product.template)
+            # ya que todos los campos que actualizamos (name, list_price, x_brand_discount, x_product_url)
+            # pertenecen a la plantilla y no a la variante (product.product).
+            product.product_tmpl_id.write(update_vals)
 
             return {"status": "success", "message": "Product updated successfully", "product_id": product.id}
 
